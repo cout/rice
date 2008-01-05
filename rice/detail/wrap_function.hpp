@@ -9,7 +9,6 @@
 
 #include "Exception_Handler.hpp"
 #include "Wrapped_Function.hpp"
-
 namespace Rice
 {
 
@@ -19,6 +18,11 @@ namespace detail
 #ifdef DOXYGEN
 
 #else
+
+template<typename Ret_T>
+Wrapped_Function * wrap_function(
+    Ret_T (*func)(),
+    Exception_Handler const * handler = 0);
 
 template<typename Ret_T, typename Arg0_T>
 Wrapped_Function * wrap_function(

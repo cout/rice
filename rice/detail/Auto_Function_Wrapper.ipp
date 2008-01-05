@@ -1344,6 +1344,46 @@ call(VALUE ruby_arg0)
 }
 
 // ---------------------------------------------------------------------
+template<typename Func_T>
+Auto_Function_Wrapper<Func_T, void>::
+Auto_Function_Wrapper(
+    Func func,
+    Exception_Handler const * handler)
+  : Wrapped_Function(RUBY_METHOD_FUNC(call), Num_Args)
+  , func_(func)
+  , handler_(handler ? handler : new Default_Exception_Handler)
+{
+}
+
+template<typename Func_T>
+VALUE Auto_Function_Wrapper<Func_T, void>::
+call()
+{
+  Auto_Function_Wrapper<Func_T, void> * wrapper = 0;
+  try
+  {
+    void * data = detail::method_data();
+    wrapper =
+      (Auto_Function_Wrapper<Func_T, void> *)data;
+    wrapper->func_();
+    return Qnil;
+  }
+  catch(...)
+  {
+    RUBY_TRY
+    {
+      if(wrapper)
+      {
+        return wrapper->handler_->handle_exception();
+      }
+      else
+      {
+        throw;
+      }
+    }
+    RUBY_CATCH
+  }
+}
 
 } // namespace detail
 

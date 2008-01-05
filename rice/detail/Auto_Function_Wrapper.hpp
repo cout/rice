@@ -707,6 +707,27 @@ private:
 };
 
 // ---------------------------------------------------------------------
+
+template<typename Func_T>
+class Auto_Function_Wrapper<Func_T, void>
+  : public Wrapped_Function
+{
+public:
+  // typedef void (*Func)();
+  typedef Func_T Func;
+
+  static const int Num_Args = 0;
+
+  Auto_Function_Wrapper(
+      Func func,
+      Exception_Handler const * handler = 0);
+
+  static VALUE call();
+
+private:
+  Func func_;
+  Exception_Handler const * handler_;
+};
 #endif // DOXYGEN
 
 } // namespace detail

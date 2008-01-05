@@ -31,7 +31,7 @@ void handle_silly_exception(Silly_Exception const & ex)
   throw Exception(rb_eRuntimeError, "SILLY");
 }
 
-void throw_silly_exception(Object self)
+void throw_silly_exception()
 {
   throw Silly_Exception();
 }
@@ -54,7 +54,7 @@ namespace
 
 bool define_method_simple_ok;
 
-void define_method_simple_helper(Object o)
+void define_method_simple_helper()
 {
   define_method_simple_ok = true;
 }

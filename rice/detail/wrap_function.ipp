@@ -15,6 +15,15 @@ namespace Rice
 namespace detail
 {
 
+template<typename Ret_T>
+Wrapped_Function * wrap_function(
+    Ret_T (*func)(),
+    Exception_Handler const * handler)
+{
+  typedef Ret_T (*Func)();
+  return new Auto_Function_Wrapper<Func, Ret_T>(func, handler);
+}
+
 template<typename Ret_T, typename Arg0_T>
 Wrapped_Function * wrap_function(
     Ret_T (*func)(Arg0_T),

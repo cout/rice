@@ -561,10 +561,75 @@ hpp_head = <<END
 #include "Exception_Handler.hpp"
 
 END
+hpp_tail = <<END
+
+template<typename Func_T>
+class Auto_Function_Wrapper<Func_T, void>
+  : public Wrapped_Function
+{
+public:
+  // typedef void (*Func)();
+  typedef Func_T Func;
+
+  static const int Num_Args = 0;
+
+  Auto_Function_Wrapper(
+      Func func,
+      Exception_Handler const * handler = 0);
+
+  static VALUE call();
+
+private:
+  Func func_;
+  Exception_Handler const * handler_;
+};
+END
 ipp_head = <<END
 #include "method_data.hpp"
 #include "../ruby_try_catch.hpp"
 #include "../to_from_ruby.hpp"
+END
+ipp_tail = <<END
+template<typename Func_T>
+Auto_Function_Wrapper<Func_T, void>::
+Auto_Function_Wrapper(
+    Func func,
+    Exception_Handler const * handler)
+  : Wrapped_Function(RUBY_METHOD_FUNC(call), Num_Args)
+  , func_(func)
+  , handler_(handler ? handler : new Default_Exception_Handler)
+{
+}
+
+template<typename Func_T>
+VALUE Auto_Function_Wrapper<Func_T, void>::
+call()
+{
+  Auto_Function_Wrapper<Func_T, void> * wrapper = 0;
+  try
+  {
+    void * data = detail::method_data();
+    wrapper =
+      (Auto_Function_Wrapper<Func_T, void> *)data;
+    wrapper->func_();
+    return Qnil;
+  }
+  catch(...)
+  {
+    RUBY_TRY
+    {
+      if(wrapper)
+      {
+        return wrapper->handler_->handle_exception();
+      }
+      else
+      {
+        throw;
+      }
+    }
+    RUBY_CATCH
+  }
+}
 END
 ipp_filename = 'detail/Auto_Function_Wrapper.ipp'
 hpp_filename = 'detail/Auto_Function_Wrapper.hpp'
@@ -605,6 +670,8 @@ wrap_header(hpp_filename, 'Rice::detail', docstring, true, hpp_head) do |hpp|
       })
       j -= 1
     end
+    ipp.puts ipp_tail
+    hpp.puts hpp_tail
   end
 end
 
@@ -949,16 +1016,35 @@ END
 hpp_head = <<END
 #include "Exception_Handler.hpp"
 #include "Wrapped_Function.hpp"
+END
+hpp_start = <<END
+template<typename Ret_T>
+Wrapped_Function * wrap_function(
+    Ret_T (*func)(),
+    Exception_Handler const * handler = 0);
 
 END
 ipp_head = <<END
 #include "Auto_Function_Wrapper.hpp"
 #include "Auto_Member_Function_Wrapper.hpp"
 END
+ipp_start = <<END
+template<typename Ret_T>
+Wrapped_Function * wrap_function(
+    Ret_T (*func)(),
+    Exception_Handler const * handler)
+{
+  typedef Ret_T (*Func)();
+  return new Auto_Function_Wrapper<Func, Ret_T>(func, handler);
+}
+
+END
 ipp_filename = 'detail/wrap_function.ipp'
 hpp_filename = 'detail/wrap_function.hpp'
 wrap_header(hpp_filename, 'Rice::detail', docstring, true, hpp_head) do |hpp|
   wrap_header(ipp_filename, 'Rice::detail', nil, false, ipp_head) do |ipp|
+    ipp.puts ipp_start
+    hpp.puts hpp_start
     for j in 0..MAX_ARGS do
       t_array = (0..j).to_a
       typenames     = t_array.map { |x| "Arg#{x}_T" }.join(', ')
