@@ -563,6 +563,27 @@ hpp_head = <<END
 END
 hpp_tail = <<END
 
+template<typename Func_T, typename Ret_T>
+class Auto_Function_Wrapper<Func_T, Ret_T>
+  : public Wrapped_Function
+{
+public:
+  // typedef void (*Func)();
+  typedef Func_T Func;
+
+  static const int Num_Args = 0;
+
+  Auto_Function_Wrapper(
+      Func func,
+      Exception_Handler const * handler = 0);
+
+  static VALUE call();
+
+private:
+  Func func_;
+  Exception_Handler const * handler_;
+};
+
 template<typename Func_T>
 class Auto_Function_Wrapper<Func_T, void>
   : public Wrapped_Function
@@ -590,6 +611,46 @@ ipp_head = <<END
 #include "../to_from_ruby.hpp"
 END
 ipp_tail = <<END
+template<typename Func_T, typename Ret_T>
+Auto_Function_Wrapper<Func_T, Ret_T>::
+Auto_Function_Wrapper(
+    Func func,
+    Exception_Handler const * handler)
+  : Wrapped_Function(RUBY_METHOD_FUNC(call), Num_Args)
+  , func_(func)
+  , handler_(handler ? handler : new Default_Exception_Handler)
+{
+}
+
+template<typename Func_T, typename Ret_T>
+VALUE Auto_Function_Wrapper<Func_T, Ret_T>::
+call()
+{
+  Auto_Function_Wrapper<Func_T, Ret_T> * wrapper = 0;
+  try
+  {
+    void * data = detail::method_data();
+    wrapper =
+      (Auto_Function_Wrapper<Func_T, Ret_T> *)data;
+    return to_ruby<Ret_T>(wrapper->func_());
+  }
+  catch(...)
+  {
+    RUBY_TRY
+    {
+      if(wrapper)
+      {
+        return wrapper->handler_->handle_exception();
+      }
+      else
+      {
+        throw;
+      }
+    }
+    RUBY_CATCH
+  }
+}
+
 template<typename Func_T>
 Auto_Function_Wrapper<Func_T, void>::
 Auto_Function_Wrapper(
@@ -635,8 +696,7 @@ ipp_filename = 'detail/Auto_Function_Wrapper.ipp'
 hpp_filename = 'detail/Auto_Function_Wrapper.hpp'
 wrap_header(hpp_filename, 'Rice::detail', docstring, true, hpp_head) do |hpp|
   wrap_header(ipp_filename, 'Rice::detail', nil, false, ipp_head) do |ipp|
-    j = MAX_ARGS # TODO: what's the best way to iterate backward?
-    while j >= 0 do
+    MAX_ARGS.downto(0) do |j|
       t_array = (0..j).to_a
       value_args    = t_array.map { |x| "VALUE ruby_arg#{x}" }.join(', ')
       arg_list      = t_array.map { |x| "arg#{x}" }.join(', ')
@@ -668,7 +728,6 @@ wrap_header(hpp_filename, 'Rice::detail', docstring, true, hpp_head) do |hpp|
         :j                => j,
         :specializations  => specializations,
       })
-      j -= 1
     end
     ipp.puts ipp_tail
     hpp.puts hpp_tail
@@ -824,8 +883,7 @@ ipp_filename = 'detail/Auto_Member_Function_Wrapper.ipp'
 hpp_filename = 'detail/Auto_Member_Function_Wrapper.hpp'
 wrap_header(hpp_filename, 'Rice::detail', docstring, true) do |hpp|
   wrap_header(ipp_filename, 'Rice::detail', nil, false, ipp_head) do |ipp|
-    j = MAX_ARGS # TODO: what's the best way to iterate backward?
-    while j >= 0 do
+    MAX_ARGS.downto(0) do |j|
       t_array = (1..j).to_a
       value_args   = t_array.map { |x| ", VALUE ruby_arg#{x}" }
       arg_list      = t_array.map { |x| "arg#{x}" }.join(', ')
@@ -859,7 +917,6 @@ wrap_header(hpp_filename, 'Rice::detail', docstring, true) do |hpp|
         :j                => j,
         :specializations  => specializations,
       })
-      j -= 1
     end
   end
 end
