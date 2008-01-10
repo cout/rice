@@ -48,8 +48,8 @@ void Init_classes(void)
   {
     // Class wrapper
     define_class<Tester>("Tester")
-      .define_constructor(Constructor<Tester>())
-      //.define_constructor(Constructor<Tester, std::string>())
+      //.define_constructor(Constructor<Tester>())
+      .define_constructor(Constructor<Tester, std::string>())
       .define_method("print_class_name", &Tester::printClassName)
       .define_method("add_numbers", &Tester::addNumbers)
 

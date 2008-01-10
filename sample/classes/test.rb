@@ -1,6 +1,6 @@
 require 'classes'
 
-c = Tester.new
+c = Tester.new("Gotcha")
 puts "The name of the class from C++ is: "
 c.print_class_name
 
