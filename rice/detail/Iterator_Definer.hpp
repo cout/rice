@@ -27,7 +27,11 @@ public:
 
     virtual VALUE call_impl(VALUE self) = 0;
 
-    static VALUE call(VALUE self)
+    /**
+     * Must match the -1 call format, as this is the method
+     * that gets called from Ruby 
+     */
+    static VALUE call(int argc, VALUE* argv, VALUE self)
     {
       void * data = method_data();
       Iterator * iterator = static_cast<Iterator *>(data);

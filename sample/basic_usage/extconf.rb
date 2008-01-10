@@ -1,8 +1,8 @@
 require 'mkmf'
-$CFLAGS = '-g -Wall -I../..'
+$CFLAGS = '-g -Wall -I../.. -fno-inline'
 $LDFLAGS = '-L../../rice'
 $LIBS = '-lrice'
-create_makefile('sample_enum')
+create_makefile('definitions')
 
 File.open('Makefile', 'a') do |mf|
   mf.puts 'LDSHARED = $(CXX) -shared'
