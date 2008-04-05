@@ -7,6 +7,7 @@
 #include "detail/creation_funcs.hpp"
 #include "detail/method_data.hpp"
 #include "detail/Caster.hpp"
+#include "detail/demangle.hpp"
 
 #include <stdexcept>
 #include <typeinfo>
@@ -48,7 +49,7 @@ bind(Module const & klass)
   // GC shuts down.
   rb_gc_register_address(&klass_);
 
-  for(typename Instances::const_iterator it = unbound_instances().begin(),
+  for(typename Instances::iterator it = unbound_instances().begin(),
       end = unbound_instances().end();
       it != end;
       unbound_instances().erase(it++))
@@ -85,6 +86,23 @@ inline Rice::Data_Type<T>::
 ~Data_Type()
 {
   unbound_instances().erase(this);
+}
+
+template<typename T>
+Rice::Module
+Rice::Data_Type<T>::
+klass() {
+  if(is_bound())
+  {
+    return klass_;
+  }
+  else
+  {
+    std::string s;
+    s += detail::demangle(typeid(T *).name());
+    s += " is unbound";
+    throw std::runtime_error(s.c_str());
+  }
 }
 
 template<typename T>

@@ -1,4 +1,5 @@
 #include "String.hpp"
+#include "Builtin_Object.hpp"
 #include "protect.hpp"
 #include "detail/ruby.hpp"
 
@@ -68,7 +69,7 @@ length() const
 }
 
 char Rice::String::
-operator[](ssize_t index) const
+operator[](ptrdiff_t index) const
 {
   return RSTRING_PTR(value())[index];
 }

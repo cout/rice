@@ -1,5 +1,6 @@
 #include "unittest.hpp"
 #include "rice/Class.hpp"
+#include "rice/Constructor.hpp"
 #include "rice/protect.hpp"
 #include "rice/Exception.hpp"
 #include "rice/Array.hpp"
@@ -94,7 +95,7 @@ void define_method_simple_helper(Object o)
 TESTCASE(define_method_simple)
 {
   Class c(anonymous_class());
-  c.define_method("foo", define_method_simple_helper);
+  c.define_method("foo", &define_method_simple_helper);
   Object o = c.call("new");
   define_method_simple_ok = false;
   o.call("foo");
@@ -104,7 +105,7 @@ TESTCASE(define_method_simple)
 TESTCASE(define_singleton_method_simple)
 {
   Class c(anonymous_class());
-  c.define_singleton_method("foo", define_method_simple_helper);
+  c.define_singleton_method("foo", &define_method_simple_helper);
   define_method_simple_ok = false;
   Object o = c.call("foo");
   ASSERT(define_method_simple_ok);
@@ -116,7 +117,7 @@ TESTCASE(define_module_function_simple)
   Class c(anonymous_class());
   ASSERT_EXCEPTION_CHECK(
       Exception,
-      c.define_module_function("foo", define_method_simple_helper),
+      c.define_module_function("foo", &define_method_simple_helper),
       ASSERT_EQUAL(
           Object(rb_eNoMethodError), // TODO: 1.6.x?
           Object(CLASS_OF(ex.value()))
@@ -126,27 +127,20 @@ TESTCASE(define_module_function_simple)
 
 namespace
 {
+
   int define_method_int_result;
 
-  class IntHelper {
-    public: 
-      IntHelper() { }
-
-      void define_method_int_helper(int i)
-      {
-        define_method_int_result = i;
-      }
-  };
+  void define_method_int_helper(int i)
+  {
+    define_method_int_result = i;
+  }
 
 } // namespace
 
 TESTCASE(define_method_int)
 {
-  Class c = 
-    define_class<IntHelper>("IntHelper")
-      .define_constructor(Constructor<IntHelper>())
-      .define_method("foo", &IntHelper::define_method_int_helper);
-
+  Class c(anonymous_class());
+  c.define_method("foo", &define_method_int_helper);
   Object o = c.call("new");
   define_method_int_result = 0;
   o.call("foo", 42);
@@ -155,11 +149,8 @@ TESTCASE(define_method_int)
 
 TESTCASE(define_method_int_passed_two_args)
 {
-  Class c = 
-    define_class<IntHelper>("IntHelper")
-      .define_constructor(Constructor<IntHelper>())
-      .define_method("foo", &IntHelper::define_method_int_helper);
-
+  Class c(anonymous_class());
+  c.define_method("foo", &define_method_int_helper);
   Object o = c.call("new");
   ASSERT_EXCEPTION_CHECK(
       Exception,
@@ -173,11 +164,8 @@ TESTCASE(define_method_int_passed_two_args)
 
 TESTCASE(define_method_int_passed_no_args)
 {
-  Class c = 
-    define_class<IntHelper>("IntHelper")
-      .define_constructor(Constructor<IntHelper>())
-      .define_method("foo", &IntHelper::define_method_int_helper);
-
+  Class c(anonymous_class());
+  c.define_method("foo", &define_method_int_helper);
   Object o = c.call("new");
   ASSERT_EXCEPTION_CHECK(
       Exception,
@@ -219,7 +207,7 @@ Foo * from_ruby<Foo *>(Object x)
 TESTCASE(define_method_int_foo)
 {
   Class c(anonymous_class());
-  c.define_method("foo", define_method_int_foo_helper);
+  c.define_method("foo", &define_method_int_foo_helper);
   Object o = c.call("new");
   define_method_int_result = 0;
   Foo * foo = new Foo;
@@ -300,10 +288,10 @@ TESTCASE(define_iterator)
   Object wrapped_container = Data_Wrap_Struct(
       c, 0, Default_Allocation_Strategy<Container>::free, container);
   Array a = wrapped_container.instance_eval("a = []; each() { |x| a << x }; a");
-  ASSERT_EQUAL(3, a.size());
-  //ASSERT_EQUAL(to_ruby(1), Object(a[0]));
-  //ASSERT_EQUAL(to_ruby(2), Object(a[1]));
-  //ASSERT_EQUAL(to_ruby(3), Object(a[2]));
+  ASSERT_EQUAL(3u, a.size());
+  ASSERT_EQUAL(to_ruby(1), Object(a[0]));
+  ASSERT_EQUAL(to_ruby(2), Object(a[1]));
+  ASSERT_EQUAL(to_ruby(3), Object(a[2]));
 }
 
 TESTCASE(define_class)
@@ -341,3 +329,45 @@ TESTCASE(define_class_under)
   ASSERT(!object.const_defined("Foo"));
 }
 
+TESTCASE(module_define_class)
+{
+  Class object(rb_cObject);
+  if(object.const_defined("Foo"))
+  {
+    object.remove_const("Foo");
+  }
+
+  Module math(rb_mMath);
+  if(math.const_defined("Foo"))
+  {
+    math.remove_const("Foo");
+  }
+
+  Class c = math.define_class("Foo");
+
+  ASSERT(c.is_a(rb_cClass));
+  ASSERT_EQUAL(c, math.const_get("Foo"));
+  ASSERT(!object.const_defined("Foo"));
+}
+
+namespace {
+  class BaseClass {
+    public:
+      BaseClass() { }
+  };
+}
+
+TESTCASE(subclassing)
+{
+  Module m = define_module("Testing");
+  define_class_under<BaseClass>(m, "BaseClass").
+    define_constructor(Constructor<BaseClass>());
+
+  // Not sure how to make this a true failure case. If the subclassing
+  // doesn't work, Ruby will throw an error:
+  // 
+  //    in `new': wrong instance allocation
+  //
+  m.instance_eval("class NewClass < Testing::BaseClass; end;");
+  m.instance_eval("n = NewClass.new");
+}

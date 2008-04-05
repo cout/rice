@@ -1,7 +1,7 @@
 #ifndef Rice__Enum__hpp_
 #define Rice__Enum__hpp_
 
-#include "to_from_ruby.hpp"
+#include "to_from_ruby_defn.hpp"
 #include "Address_Registration_Guard.hpp"
 #include "Array.hpp"
 #include "Hash.hpp"
@@ -19,6 +19,10 @@ struct Default_Enum_Traits
   //! Converts the enum value to a long.
   static long as_long(Enum_T value);
 };
+
+/*!
+ *  \example enum/sample_enum.cpp
+ */
 
 //! A wrapper for enumerated types.
 /*! Provides a simple type-safe wrapper for enumerated types.  At the
@@ -38,8 +42,6 @@ struct Default_Enum_Traits
  *      .define_value("Blue", Blue)
  *      .initialize("Color");
  *  \endcode
- *
- *  \example enum/enum.cpp
  */
 template<typename Enum_T, typename Enum_Traits = Default_Enum_Traits<Enum_T> >
 class Enum

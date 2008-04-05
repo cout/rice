@@ -5,6 +5,7 @@
 #include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
 #include "detail/st.hpp"
+#include "detail/remove_const.hpp"
 #include <iterator>
 
 namespace Rice
@@ -182,7 +183,7 @@ public:
   //! Inequality operator.
   bool operator!=(Iterator const & rhs) const;
 
-  template<typename Value_T_>
+  template<typename Hash_Ref_T_, typename Value_T_>
   friend class Hash::Iterator;
 
   //! Swap with another iterator of the same type.
@@ -194,7 +195,7 @@ private:
   int bin_;
   st_table_entry * ptr_;
 
-  mutable Value_T tmp_;
+  mutable typename detail::remove_const<Value_T>::Type tmp_;
 };
 
 } // namespace Rice

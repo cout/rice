@@ -201,10 +201,15 @@ public:
    *  \param T the C++ type of the wrapped class.
    *  \return the new class.
    */
+  // This function needs to be defined inline to work around a bug in
+  // g++ 3.3.3.
   template<typename T>
   Data_Type<T>
   define_class(
-      char const * name);
+      char const * name)
+  {
+    return this->define_class_with_object_as_base<T>(name);
+  }
 
   //! Define a new data class under this module.
   /*! The class with have a base class determined by Base_T (specifically,
@@ -216,6 +221,13 @@ public:
   template<typename T, typename T_Base_T>
   Data_Type<T>
   define_class(
+      char const * name);
+
+private:
+  // Workaround for g++ 3.3.3 (see above).
+  template<typename T>
+  Data_Type<T>
+  define_class_with_object_as_base(
       char const * name);
 };
 

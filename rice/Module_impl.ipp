@@ -247,7 +247,7 @@ Rice::Module_impl<Base_T, Derived_T>::
 const_defined(Identifier name) const
 {
   int result = protect(rb_const_defined, *this, name);
-  return result;
+  return bool(result);
 }
 
 template<typename Base_T, typename Derived_T>
@@ -285,7 +285,7 @@ template<typename T>
 inline
 Rice::Data_Type<T>
 Rice::Module_impl<Base_T, Derived_T>::
-define_class(
+define_class_with_object_as_base(
     char const * name)
 {
   return Rice::define_class_under<T>(*this, name);

@@ -2,7 +2,8 @@
 #define Rice__String__hpp_
 
 #include "Identifier.hpp"
-#include "Builtin_Object.hpp"
+#include "Builtin_Object_defn.hpp"
+#include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
 #include <string>
 
@@ -53,7 +54,7 @@ public:
   /*! \param index the desired index.
    *  \return the character at the given index.
    */
-  char operator[](ssize_t index) const;
+  char operator[](ptrdiff_t index) const;
 
   //! Return a pointer to the beginning of the underlying C string.
   char const * c_str() const;

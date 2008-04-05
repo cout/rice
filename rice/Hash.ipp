@@ -3,7 +3,9 @@
 
 #include "protect.hpp"
 #include "to_from_ruby.hpp"
+#include "Builtin_Object.hpp"
 #include "Exception.hpp"
+#include "Builtin_Object.hpp"
 #include <algorithm>
 
 // TODO: Evil hack
@@ -111,18 +113,18 @@ get(Key_T const & key)
 inline Rice::Hash::Entry::
 Entry(Hash hash, Object key)
   : key(key)
-  , first(this->key)
+  , first(Hash::Entry::key)
   , value(hash, key)
-  , second(this->value)
+  , second(Hash::Entry::value)
 {
 }
 
 inline Rice::Hash::Entry::
 Entry(Entry const & entry)
   : key(entry.key)
-  , first(this->key)
+  , first(Hash::Entry::key)
   , value(entry.value)
-  , second(this->value)
+  , second(Hash::Entry::value)
 {
 }
 

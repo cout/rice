@@ -8,6 +8,10 @@
 #include <map>
 #include <set>
 
+/*!
+ *  \example map/map.cpp
+ */
+
 namespace Rice
 {
 
@@ -32,12 +36,60 @@ public:
   //! Destructor.
   virtual ~Data_Type_Base() = 0;
 
+  // Must be public to workaround gcc 3.3
+  typedef std::map<VALUE, detail::Abstract_Caster *> Casters;
+
 protected:
   virtual detail::Abstract_Caster * caster() const = 0;
 
-  typedef std::map<VALUE, detail::Abstract_Caster *> Casters;
   static Casters casters_;
 };
+
+//! Define a new data class in the namespace given by module.
+/*! The class will have a base class of Object.
+ *  \param T the C++ type of the wrapped class.
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
+template<typename T>
+Rice::Data_Type<T> define_class_under(
+    Object module,
+    char const * name);
+
+//! Define a new data class in the namespace given by module.
+/*! The class with have a base class determined by Base_T (specifically,
+ *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
+ *  have been registered using define_class<> or define_class_under<>.
+ *  \param T the C++ type of the wrapped class.
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
+template<typename T, typename Base_T>
+Rice::Data_Type<T> define_class_under(
+    Object module,
+    char const * name);
+
+//! Define a new data class in the default namespace.
+/*! The class will have a base class of Object.
+ *  \param T the C++ type of the wrapped class.
+ *  \return the new class.
+ */
+template<typename T>
+Rice::Data_Type<T> define_class(
+    char const * name);
+
+//! Define a new data class in the default namespace.
+/*! The class with have a base class determined by Base_T (specifically,
+ *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
+ *  have been registered using define_class<> or define_class_under<>.
+ *  \param T the C++ type of the wrapped class.
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
+template<typename T, typename Base_T>
+Rice::Data_Type<T> define_class(
+    char const * name);
+
 
 //! A mechanism for binding ruby types to C++ types.
 /*! This class binds run-time types (Ruby VALUEs) to compile-time types
@@ -70,7 +122,7 @@ public:
   //! Explictly return the Ruby type.
   /*! \return the ruby class to which the type is bound.
    */
-  static Module klass() { return klass_; }
+  static Module klass();
 
   //! Assignment operator which takes a Module
   /*! \param klass must be the class to which this data type is already
@@ -158,50 +210,6 @@ private:
   }
 };
 
-//! Define a new data class in the namespace given by module.
-/*! The class will have a base class of Object.
- *  \param T the C++ type of the wrapped class.
- *  \param module the the Module in which to define the class.
- *  \return the new class.
- */
-template<typename T>
-Rice::Data_Type<T> define_class_under(
-    Object module,
-    char const * name);
-
-//! Define a new data class in the namespace given by module.
-/*! The class with have a base class determined by Base_T (specifically,
- *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
- *  have been registered using define_class<> or define_class_under<>.
- *  \param T the C++ type of the wrapped class.
- *  \param module the the Module in which to define the class.
- *  \return the new class.
- */
-template<typename T, typename Base_T>
-Rice::Data_Type<T> define_class_under(
-    Object module,
-    char const * name);
-
-//! Define a new data class in the default namespace.
-/*! The class will have a base class of Object.
- *  \param T the C++ type of the wrapped class.
- *  \return the new class.
- */
-template<typename T>
-Rice::Data_Type<T> define_class(
-    char const * name);
-
-//! Define a new data class in the default namespace.
-/*! The class with have a base class determined by Base_T (specifically,
- *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
- *  have been registered using define_class<> or define_class_under<>.
- *  \param T the C++ type of the wrapped class.
- *  \param module the the Module in which to define the class.
- *  \return the new class.
- */
-template<typename T, typename Base_T>
-Rice::Data_Type<T> define_class(
-    char const * name);
 
 } // namespace Rice
 
