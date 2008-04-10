@@ -2,6 +2,7 @@
 #include "Class.hpp"
 #include "String.hpp"
 #include "Array.hpp"
+#include "detail/env.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -149,5 +150,11 @@ operator>(Rice::Object const & lhs, Rice::Object const & rhs)
 {
   Object result = lhs.call(">", rhs);
   return result.test();
+}
+
+Rice::Object Rice::
+self()
+{
+  return ruby_frame->self;
 }
 

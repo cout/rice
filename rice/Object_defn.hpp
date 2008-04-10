@@ -177,6 +177,8 @@ extern Object const True;
 extern Object const False;
 extern Object const Undef;
 
+Object self();
+
 } // namespace Rice
 
 #endif // Rice__Object_defn__hpp_

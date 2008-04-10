@@ -6,7 +6,6 @@
 #include "rice/Array.hpp"
 #include "rice/String.hpp"
 #include "rice/Symbol.hpp"
-#include "rice/Constructor.hpp"
 #include <iostream>
 
 using namespace Rice;
@@ -85,7 +84,7 @@ namespace
 
 bool define_method_simple_ok;
 
-void define_method_simple_helper(Object o)
+void define_method_simple_helper()
 {
   define_method_simple_ok = true;
 }
@@ -128,12 +127,12 @@ TESTCASE(define_module_function_simple)
 namespace
 {
 
-  int define_method_int_result;
+int define_method_int_result;
 
-  void define_method_int_helper(int i)
-  {
-    define_method_int_result = i;
-  }
+void define_method_int_helper(int i)
+{
+  define_method_int_result = i;
+}
 
 } // namespace
 
@@ -188,7 +187,7 @@ struct Foo
 int define_method_int_foo_result_i;
 Foo * define_method_int_foo_result_x;
 
-void define_method_int_foo_helper(Object o, int i, Foo * x)
+void define_method_int_foo_helper(int i, Foo * x)
 {
   define_method_int_foo_result_i = i;
   define_method_int_foo_result_x = x;
@@ -231,7 +230,7 @@ void handle_silly_exception(Silly_Exception const & ex)
   throw Exception(rb_eRuntimeError, "SILLY");
 }
 
-void throw_silly_exception(Object self)
+void throw_silly_exception()
 {
   throw Silly_Exception();
 }

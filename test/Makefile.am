@@ -33,6 +33,7 @@ AM_CPPFLAGS = \
 	$(RUBY_CPPFLAGS)
 
 AM_CXXLAGS = \
+	-fnoinline \
 	$(RUBY_CXXFLAGS)
 
 AM_LDFLAGS = \

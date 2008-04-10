@@ -83,7 +83,7 @@ define_method_with_data(
     int num_args,
     void * data)
 {
-  NODE * node = NEW_CFUNC(func, -1); //num_args);
+  NODE * node = NEW_CFUNC(func, num_args);
   node->nd_entry = (global_entry *)data;
 #if RUBY_VERSION_CODE >= 180
   rb_add_method(klass, rb_intern(name), node, NOEX_PUBLIC);

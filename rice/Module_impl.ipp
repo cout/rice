@@ -109,11 +109,7 @@ public:
 
   virtual VALUE call_impl(VALUE self) = 0;
 
-  /**
-   * Must match the -1 call format, as this is the method
-   * that gets called from Ruby 
-   */
-  static VALUE call(int argc, VALUE* argv, VALUE self)
+  static VALUE call(VALUE self)
   {
     void * data = Rice::detail::method_data();
     Iterator * iterator = static_cast<Iterator *>(data);

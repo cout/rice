@@ -24,7 +24,6 @@ class Auto_Function_Wrapper
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T, Arg15_T);
   typedef Func_T Func;
 
   static const int Num_Args = 16;
@@ -33,7 +32,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14, VALUE ruby_arg15);
 
 private:
   Func func_;
@@ -45,7 +44,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T, Arg15_T);
   typedef Func_T Func;
 
   static const int Num_Args = 16;
@@ -54,7 +52,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14, VALUE ruby_arg15);
 
 private:
   Func func_;
@@ -67,7 +65,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T);
   typedef Func_T Func;
 
   static const int Num_Args = 15;
@@ -76,7 +73,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14);
 
 private:
   Func func_;
@@ -88,7 +85,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T);
   typedef Func_T Func;
 
   static const int Num_Args = 15;
@@ -97,7 +93,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14);
 
 private:
   Func func_;
@@ -110,7 +106,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T);
   typedef Func_T Func;
 
   static const int Num_Args = 14;
@@ -119,7 +114,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13);
 
 private:
   Func func_;
@@ -131,7 +126,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T);
   typedef Func_T Func;
 
   static const int Num_Args = 14;
@@ -140,7 +134,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13);
 
 private:
   Func func_;
@@ -153,7 +147,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T);
   typedef Func_T Func;
 
   static const int Num_Args = 13;
@@ -162,7 +155,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12);
 
 private:
   Func func_;
@@ -174,7 +167,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T);
   typedef Func_T Func;
 
   static const int Num_Args = 13;
@@ -183,7 +175,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12);
 
 private:
   Func func_;
@@ -196,7 +188,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T);
   typedef Func_T Func;
 
   static const int Num_Args = 12;
@@ -205,7 +196,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11);
 
 private:
   Func func_;
@@ -217,7 +208,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T);
   typedef Func_T Func;
 
   static const int Num_Args = 12;
@@ -226,7 +216,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11);
 
 private:
   Func func_;
@@ -239,7 +229,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T);
   typedef Func_T Func;
 
   static const int Num_Args = 11;
@@ -248,7 +237,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10);
 
 private:
   Func func_;
@@ -260,7 +249,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T);
   typedef Func_T Func;
 
   static const int Num_Args = 11;
@@ -269,7 +257,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10);
 
 private:
   Func func_;
@@ -282,7 +270,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T);
   typedef Func_T Func;
 
   static const int Num_Args = 10;
@@ -291,7 +278,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9);
 
 private:
   Func func_;
@@ -303,7 +290,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T);
   typedef Func_T Func;
 
   static const int Num_Args = 10;
@@ -312,7 +298,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9);
 
 private:
   Func func_;
@@ -325,7 +311,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T);
   typedef Func_T Func;
 
   static const int Num_Args = 9;
@@ -334,7 +319,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8);
 
 private:
   Func func_;
@@ -346,7 +331,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T);
   typedef Func_T Func;
 
   static const int Num_Args = 9;
@@ -355,7 +339,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8);
 
 private:
   Func func_;
@@ -368,7 +352,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T);
   typedef Func_T Func;
 
   static const int Num_Args = 8;
@@ -377,7 +360,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7);
 
 private:
   Func func_;
@@ -389,7 +372,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T);
   typedef Func_T Func;
 
   static const int Num_Args = 8;
@@ -398,7 +380,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7);
 
 private:
   Func func_;
@@ -411,7 +393,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T);
   typedef Func_T Func;
 
   static const int Num_Args = 7;
@@ -420,7 +401,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6);
 
 private:
   Func func_;
@@ -432,7 +413,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T);
   typedef Func_T Func;
 
   static const int Num_Args = 7;
@@ -441,7 +421,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6);
 
 private:
   Func func_;
@@ -454,7 +434,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T);
   typedef Func_T Func;
 
   static const int Num_Args = 6;
@@ -463,7 +442,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5);
 
 private:
   Func func_;
@@ -475,7 +454,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T);
   typedef Func_T Func;
 
   static const int Num_Args = 6;
@@ -484,7 +462,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5);
 
 private:
   Func func_;
@@ -497,7 +475,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T);
   typedef Func_T Func;
 
   static const int Num_Args = 5;
@@ -506,7 +483,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4);
 
 private:
   Func func_;
@@ -518,7 +495,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T);
   typedef Func_T Func;
 
   static const int Num_Args = 5;
@@ -527,7 +503,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4);
 
 private:
   Func func_;
@@ -540,7 +516,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T);
   typedef Func_T Func;
 
   static const int Num_Args = 4;
@@ -549,7 +524,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3);
 
 private:
   Func func_;
@@ -561,7 +536,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T);
   typedef Func_T Func;
 
   static const int Num_Args = 4;
@@ -570,7 +544,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3);
 
 private:
   Func func_;
@@ -583,7 +557,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T);
   typedef Func_T Func;
 
   static const int Num_Args = 3;
@@ -592,7 +565,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2);
 
 private:
   Func func_;
@@ -604,7 +577,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T);
   typedef Func_T Func;
 
   static const int Num_Args = 3;
@@ -613,7 +585,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2);
 
 private:
   Func func_;
@@ -626,7 +598,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T);
   typedef Func_T Func;
 
   static const int Num_Args = 2;
@@ -635,7 +606,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1);
 
 private:
   Func func_;
@@ -647,7 +618,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T);
   typedef Func_T Func;
 
   static const int Num_Args = 2;
@@ -656,7 +626,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0, VALUE ruby_arg1);
 
 private:
   Func func_;
@@ -669,7 +639,6 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T);
   typedef Func_T Func;
 
   static const int Num_Args = 1;
@@ -678,7 +647,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0);
 
 private:
   Func func_;
@@ -690,7 +659,6 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T);
   typedef Func_T Func;
 
   static const int Num_Args = 1;
@@ -699,7 +667,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call(int argc, VALUE* args, VALUE self);
+  static VALUE call(VALUE self, VALUE ruby_arg0);
 
 private:
   Func func_;
@@ -707,13 +675,11 @@ private:
 };
 
 // ---------------------------------------------------------------------
-
 template<typename Func_T, typename Ret_T>
 class Auto_Function_Wrapper<Func_T, Ret_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)();
   typedef Func_T Func;
 
   static const int Num_Args = 0;
@@ -722,7 +688,7 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call();
+  static VALUE call(VALUE self);
 
 private:
   Func func_;
@@ -734,7 +700,6 @@ class Auto_Function_Wrapper<Func_T, void>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)();
   typedef Func_T Func;
 
   static const int Num_Args = 0;
@@ -743,12 +708,14 @@ public:
       Func func,
       Exception_Handler const * handler = 0);
 
-  static VALUE call();
+  static VALUE call(VALUE self);
 
 private:
   Func func_;
   Exception_Handler const * handler_;
 };
+
+// ---------------------------------------------------------------------
 #endif // DOXYGEN
 
 } // namespace detail

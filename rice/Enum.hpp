@@ -88,14 +88,14 @@ private:
       Module module = rb_cObject);
 
 private:
-  static Object each(Object self);
-  static Object to_s(Object self);
-  static Object to_i(Object self);
-  static Object inspect(Object self);
-  static Object compare(Object lhs, Object rhs);
-  static Object eql(Object lhs, Object rhs);
-  static Object hash(Object self);
-  static Object from_int(Class klass, Object i);
+  static Object each();
+  static Object to_s();
+  static Object to_i();
+  static Object inspect();
+  static Object compare(Object rhs);
+  static Object eql(Object rhs);
+  static Object hash();
+  static Object from_int(Object i);
 
 private:
   Array enums_;
