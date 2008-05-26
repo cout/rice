@@ -10,6 +10,7 @@ Object.cpp \
 String.cpp \
 Struct.cpp \
 Symbol.cpp \
+Thread.cpp \
 VM.cpp \
 detail/check_ruby_type.cpp \
 detail/demangle.cpp \
