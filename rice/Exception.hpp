@@ -65,5 +65,19 @@ private:
 
 } // namespace Rice
 
+template<>
+inline
+Rice::Exception from_ruby<Rice::Exception>(Rice::Object x)
+{
+  return Rice::Exception(x);
+}
+
+template<>
+inline
+Rice::Object to_ruby<Rice::Exception>(Rice::Exception const & x)
+{
+  return x;
+}
+
 #endif // Rice__Exception__hpp_
 
