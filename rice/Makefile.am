@@ -5,6 +5,7 @@ Class.cpp \
 Data_Type.cpp \
 Exception.cpp \
 Identifier.cpp \
+Method_Property.cpp \
 Module.cpp \
 Object.cpp \
 String.cpp \
@@ -17,6 +18,7 @@ detail/method_data.cpp \
 detail/protect.cpp \
 detail/mininode.cpp
 
+# TODO: why do we include the makefile as a header?
 nobase_include_HEADERS = \
 Address_Registration_Guard.hpp \
 Address_Registration_Guard.ipp \
@@ -53,6 +55,7 @@ Identifier.hpp \
 Identifier.ipp \
 Jump_Tag.hpp \
 Makefile \
+Method_Property.hpp \
 Module.hpp \
 Module.ipp \
 Module_defn.hpp \

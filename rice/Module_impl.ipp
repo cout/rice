@@ -53,6 +53,22 @@ swap(Module_base & other)
   Object::swap(other);
 }
 
+inline
+Rice::Method_Property const &
+Rice::Module_base::
+default_method_property() const
+{
+  return default_method_property_;
+}
+
+inline
+Rice::Method_Property &
+Rice::Module_base::
+default_method_property()
+{
+  return default_method_property_;
+}
+
 template<typename Exception_T, typename Functor_T>
 inline
 void
@@ -120,10 +136,15 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_method(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Method_Property const & method_property)
 {
   detail::define_method_and_auto_wrap(
-      *this, name, func, this->handler());
+      *this,
+      name,
+      func,
+      this->handler(),
+      default_method_property().combine_with(method_property));
   return (Derived_T &)*this;
 }
 
@@ -134,10 +155,11 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_singleton_method(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Method_Property const & method_property)
 {
-  detail::define_method_and_auto_wrap(
-      rb_class_of(*this), name, func, this->handler());
+  Module singleton_class(rb_class_of(*this));
+  singleton_class.define_method(name, func, method_property);
   return (Derived_T &)*this;
 }
 
@@ -148,7 +170,8 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_module_function(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Method_Property const & method_property)
 {
   if(this->rb_type() != T_MODULE)
   {
@@ -158,7 +181,7 @@ define_module_function(
   }
 
   define_method(name, func);
-  define_singleton_method(name, func);
+  define_singleton_method(name, func, method_property);
   return (Derived_T &)*this;
 }
 
@@ -174,6 +197,34 @@ define_iterator(
 {
   detail::define_iterator(*this, name, begin, end);
   return (Derived_T &)*this;
+}
+
+template<typename Base_T, typename Derived_T>
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+public_visibility()
+{
+  default_method_property().public_visibility();
+  return *this;
+}
+
+template<typename Base_T, typename Derived_T>
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+private_visibility()
+{
+  default_method_property().private_visibility();
+  return *this;
+}
+
+
+template<typename Base_T, typename Derived_T>
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+protected_visibility()
+{
+  default_method_property().protected_visibility();
+  return *this;
 }
 
 namespace Rice

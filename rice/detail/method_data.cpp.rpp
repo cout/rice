@@ -240,7 +240,12 @@ END
 VALUE
 Rice::detail::
 define_method_with_data(
-    VALUE klass, ID id, VALUE (*cfunc)(ANYARGS), int arity, VALUE data)
+    VALUE klass,
+    ID id,
+    VALUE (*cfunc)(ANYARGS),
+    int arity,
+    VALUE data,
+    int noex)
 {
   /* TODO: origin should have #to_s and #inspect methods defined */
 #ifdef HAVE_RB_CLASS_BOOT

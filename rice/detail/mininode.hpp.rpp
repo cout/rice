@@ -80,6 +80,8 @@ nil
 END
 
 static const int NOEX_PUBLIC = 0x0;
+static const int NOEX_PRIVATE = 0x2;
+static const int NOEX_PROTECTED = 0x4;
 
 inline NODE * NEW_METHOD(NODE * body, VALUE origin, int noex)
 {

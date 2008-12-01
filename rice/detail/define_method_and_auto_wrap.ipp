@@ -12,7 +12,8 @@ define_method_and_auto_wrap(
     VALUE klass,
     Identifier name,
     Fun_T function,
-    Data_Object<Exception_Handler> handler)
+    Data_Object<Exception_Handler> handler,
+    Method_Property const & method_property)
 {
   Data_Object<Wrapped_Function> f(
       wrap_function(function, handler),
@@ -23,7 +24,8 @@ define_method_and_auto_wrap(
       name.id(),
       f->func(),
       f->arity(),
-      f);
+      f,
+      method_property.noex());
 }
 
 #endif // Rice__detail__define_method_and_auto_wrap__ipp_

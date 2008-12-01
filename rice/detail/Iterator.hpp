@@ -6,6 +6,7 @@
 #include "../protect.hpp"
 #include "../Data_Object.hpp"
 #include "../Identifier.hpp"
+#include "../Method_Property.hpp"
 
 namespace Rice
 {
@@ -82,7 +83,8 @@ void define_iterator(
       name,
       (RUBY_METHOD_FUNC)iterator->call,
       0,
-      iterator);
+      iterator,
+      public_visibility().noex());
 }
 
 } // namespace detail

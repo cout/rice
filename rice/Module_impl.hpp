@@ -5,6 +5,7 @@
 #include "detail/ruby.hpp"
 #include "Object_defn.hpp"
 #include "Address_Registration_Guard_defn.hpp"
+#include "Method_Property.hpp"
 
 namespace Rice
 {
@@ -27,15 +28,20 @@ public:
 
   void swap(Module_base & other);
 
+  Method_Property const & default_method_property() const;
+
 protected:
   template<typename Exception_T, typename Functor_T>
   void add_handler(Functor_T functor);
 
   Object handler() const;
 
+  Method_Property & default_method_property();
+
 private:
   Object mutable handler_;
   Address_Registration_Guard handler_guard_;
+  Method_Property default_method_property_;
 };
 
 /*! An intermediate base class so we can always return the most-derived
@@ -102,7 +108,8 @@ public:
   template<typename Func_T>
   Derived_T & define_method(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Method_Property const & method_property = Method_Property());
 
   //! Define a singleton method.
   /*! The method's implementation can be any function or member
@@ -118,7 +125,8 @@ public:
   template<typename Func_T>
   Derived_T & define_singleton_method(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Method_Property const & method_property = Method_Property());
 
   //! Define a module function.
   /*! A module function is a function that can be accessed either as a
@@ -136,7 +144,8 @@ public:
   template<typename Func_T>
   Derived_T & define_module_function(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Method_Property const & method_property = Method_Property());
 
   //! Define an iterator.
   /*! Essentially this is a conversion from a C++-style begin/end
@@ -153,6 +162,15 @@ public:
       Iterator_T (T::*begin)(),
       Iterator_T (T::*end)(),
       Identifier name = "each");
+
+  //! Set the default visibility to public.
+  Derived_T & public_visibility();
+
+  //! Set the default visibility to private.
+  Derived_T & private_visibility();
+
+  //! Set the default visibility to protected.
+  Derived_T & protected_visibility();
 
   //! Include a module.
   /*! \param inc the module to be included.

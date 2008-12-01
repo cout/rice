@@ -10,7 +10,12 @@ namespace detail
 {
 
 VALUE define_method_with_data(
-    VALUE klass, ID id, VALUE (*cfunc)(ANYARGS), int arity, VALUE data);
+    VALUE klass,
+    ID id,
+    VALUE (*cfunc)(ANYARGS),
+    int arity,
+    VALUE data,
+    int noex);
 
 VALUE method_data();
 
