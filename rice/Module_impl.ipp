@@ -180,8 +180,14 @@ define_module_function(
         "can only define module functions for modules");
   }
 
-  define_method(name, func);
-  define_singleton_method(name, func, method_property);
+  define_method(
+      name,
+      func,
+      method_property | Rice:: private_visibility());
+  define_singleton_method(
+      name,
+      func,
+      method_property | Rice::public_visibility());
   return (Derived_T &)*this;
 }
 
