@@ -33,7 +33,7 @@ Method_Property()
 Rice::Method_Property
 Rice::Method_Property::
 combine_with(
-    Method_Property const & rhs)
+    Method_Property const & rhs) const
 {
   Method_Property new_property(*this);
 
@@ -48,7 +48,7 @@ combine_with(
 Rice::Method_Property
 Rice::Method_Property::
 operator|(
-    Method_Property const & rhs)
+    Method_Property const & rhs) const
 {
   return this->combine_with(rhs);
 }

@@ -9,9 +9,9 @@ class Method_Property
 public:
   Method_Property();
 
-  Method_Property combine_with(Method_Property const & rhs);
+  Method_Property combine_with(Method_Property const & rhs) const;
 
-  Method_Property operator|(Method_Property const & rhs);
+  Method_Property operator|(Method_Property const & rhs) const;
 
   enum Visibility
   {
