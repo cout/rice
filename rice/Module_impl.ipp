@@ -144,7 +144,7 @@ define_method(
       name,
       func,
       this->handler(),
-      default_method_property().combine_with(method_property));
+      this->default_method_property().combine_with(method_property));
   return (Derived_T &)*this;
 }
 
@@ -210,7 +210,7 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 public_visibility()
 {
-  default_method_property().public_visibility();
+  this->default_method_property().public_visibility();
   return *this;
 }
 
@@ -219,7 +219,7 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 private_visibility()
 {
-  default_method_property().private_visibility();
+  this->default_method_property().private_visibility();
   return *this;
 }
 
@@ -229,7 +229,7 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 protected_visibility()
 {
-  default_method_property().protected_visibility();
+  this->default_method_property().protected_visibility();
   return *this;
 }
 
