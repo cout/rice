@@ -24,6 +24,10 @@ namespace
 class Silly_Exception
   : public std::exception
 {
+  virtual char const * what() const throw()
+  {
+    return "this string should have been translated by the exception handler";
+  }
 };
 
 void handle_silly_exception(Silly_Exception const & ex)

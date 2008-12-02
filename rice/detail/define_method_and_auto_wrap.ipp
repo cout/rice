@@ -12,8 +12,8 @@ define_method_and_auto_wrap(
     VALUE klass,
     Identifier name,
     Fun_T function,
-    Data_Object<Exception_Handler> handler,
-    Method_Property const & method_property)
+    Method_Property const & method_property,
+    Data_Object<Exception_Handler> handler)
 {
   Data_Object<Wrapped_Function> f(
       wrap_function(function, handler),

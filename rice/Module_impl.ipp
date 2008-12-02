@@ -137,14 +137,15 @@ Rice::Module_impl<Base_T, Derived_T>::
 define_method(
     Identifier name,
     Func_T func,
-    Method_Property const & method_property)
+    Method_Property const & method_property,
+    Object handler)
 {
   detail::define_method_and_auto_wrap(
       *this,
       name,
       func,
-      this->handler(),
-      this->default_method_property().combine_with(method_property));
+      this->default_method_property().combine_with(method_property),
+      handler.is_nil() ? this->handler() : handler);
   return (Derived_T &)*this;
 }
 
@@ -156,10 +157,15 @@ Rice::Module_impl<Base_T, Derived_T>::
 define_singleton_method(
     Identifier name,
     Func_T func,
-    Method_Property const & method_property)
+    Method_Property const & method_property,
+    Object handler)
 {
   Module singleton_class(rb_class_of(*this));
-  singleton_class.define_method(name, func, method_property);
+  singleton_class.define_method(
+      name,
+      func,
+      method_property,
+      handler.is_nil() ? this->handler() : handler);
   return (Derived_T &)*this;
 }
 
@@ -171,7 +177,8 @@ Rice::Module_impl<Base_T, Derived_T>::
 define_module_function(
     Identifier name,
     Func_T func,
-    Method_Property const & method_property)
+    Method_Property const & method_property,
+    Object handler)
 {
   if(this->rb_type() != T_MODULE)
   {
@@ -183,11 +190,13 @@ define_module_function(
   define_method(
       name,
       func,
-      method_property | Rice:: private_visibility());
+      method_property | Rice:: private_visibility(),
+      handler);
   define_singleton_method(
       name,
       func,
-      method_property | Rice::public_visibility());
+      method_property | Rice::public_visibility(),
+      handler);
   return (Derived_T &)*this;
 }
 

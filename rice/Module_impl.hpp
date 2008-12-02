@@ -109,7 +109,8 @@ public:
   Derived_T & define_method(
       Identifier name,
       Func_T func,
-      Method_Property const & method_property = Method_Property());
+      Method_Property const & method_property = Method_Property(),
+      Object handler = Rice::Nil);
 
   //! Define a singleton method.
   /*! The method's implementation can be any function or member
@@ -126,7 +127,8 @@ public:
   Derived_T & define_singleton_method(
       Identifier name,
       Func_T func,
-      Method_Property const & method_property = Method_Property());
+      Method_Property const & method_property = Method_Property(),
+      Object handler = Rice::Nil);
 
   //! Define a module function.
   /*! A module function is a function that can be accessed either as a
@@ -145,7 +147,8 @@ public:
   Derived_T & define_module_function(
       Identifier name,
       Func_T func,
-      Method_Property const & method_property = Method_Property());
+      Method_Property const & method_property = Method_Property(),
+      Object handler = Rice::Nil);
 
   //! Define an iterator.
   /*! Essentially this is a conversion from a C++-style begin/end
