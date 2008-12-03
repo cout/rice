@@ -17,7 +17,7 @@
 #include <ruby/node.h>
 #else
 /* YARV without node.h */
-#include "mininode.hpp"
+#include "detail/mininode.hpp"
 using namespace Rice::detail::Mininode;
 #endif
 
