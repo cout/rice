@@ -42,6 +42,10 @@ of the Ruby C API.
     'ruby.ac',
     'aclocal.m4',
 
+    # Libtool
+    'libtool',
+    'ltmain.sh'
+
     # Makefiles
     'Rakefile',
     'Makefile.am',

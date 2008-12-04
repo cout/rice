@@ -10,14 +10,16 @@ configure
 depcomp
 install-sh
 missing
+libtool
+ltmain.sh
 pkg
 *.o
+*.lo
 *.so
+*.a
+*.la
 *.log
 .deps
 *~
-<<<<<<< HEAD:.gitignore
 .*.swp
-=======
-*.swp
->>>>>>> yarv_method_data:.gitignore
+

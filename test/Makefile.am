@@ -37,8 +37,8 @@ AM_CXXLAGS = \
 	$(RUBY_CXXFLAGS)
 
 AM_LDFLAGS = \
-	$(RUBY_LDFLAGS) \
-	-L../rice
+	-L../rice \
+	$(RUBY_LDFLAGS)
 
 LIBS = \
 	-lrice \
