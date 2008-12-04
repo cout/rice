@@ -13,11 +13,35 @@
 #include <stdexcept>
 #include <typeinfo>
 
+template<typename Key_T>
+typename Rice::Data_Type_Base<Key_T>::Casters
+Rice::Data_Type_Base<Key_T>::casters_;
+
 template<typename T, typename Key_T>
 VALUE Rice::Data_Type<T, Key_T>::klass_ = Qnil;
 
 template<typename T, typename Key_T>
 std::auto_ptr<Rice::detail::Abstract_Caster> Rice::Data_Type<T, Key_T>::caster_;
+
+template<typename Key_T>
+Rice::Data_Type_Base<Key_T>::
+Data_Type_Base()
+  : Module_impl<Class, Data_Type_Base<Key_T> >()
+{
+}
+
+template<typename Key_T>
+Rice::Data_Type_Base<Key_T>::
+Data_Type_Base(VALUE v)
+  : Module_impl<Class, Data_Type_Base<Key_T> >(v)
+{
+}
+
+template<typename Key_T>
+Rice::Data_Type_Base<Key_T>::
+~Data_Type_Base()
+{
+}
 
 template<typename T, typename Key_T>
 template<typename Base_T>
@@ -60,14 +84,14 @@ bind(Module const & klass)
 
   detail::Abstract_Caster * base_caster = Data_Type<Base_T>().caster();
   caster_.reset(new detail::Caster<T, Base_T>(base_caster, klass));
-  Data_Type_Base::casters_.insert(std::make_pair(klass, caster_.get()));
+  Data_Type_Base<Key_T>::casters_.insert(std::make_pair(klass, caster_.get()));
   return Data_Type<T, Key_T>();
 }
 
 template<typename T, typename Key_T>
 inline Rice::Data_Type<T, Key_T>::
 Data_Type()
-  : Module_impl<Data_Type_Base, Data_Type<T> >(
+  : Module_impl<Data_Type_Base<Key_T>, Data_Type<T> >(
       klass_ == Qnil ? rb_cObject : klass_)
 {
   if(!is_bound())
@@ -79,7 +103,7 @@ Data_Type()
 template<typename T, typename Key_T>
 inline Rice::Data_Type<T, Key_T>::
 Data_Type(Module const & klass)
-  : Module_impl<Data_Type_Base, Data_Type<T, Key_T> >(
+  : Module_impl<Data_Type_Base<Key_T>, Data_Type<T, Key_T> >(
       klass)
 {
   this->bind<void>(klass);
@@ -151,9 +175,9 @@ from_ruby(Object x)
     return obj.get();
   }
 
-  Data_Type_Base::Casters::const_iterator it(
-      Data_Type_Base::casters_.find(klass));
-  if(it == Data_Type_Base::casters_.end())
+  Data_Type_Base<Key_T>::Casters::const_iterator it(
+      Data_Type_Base<Key_T>::casters_.find(klass));
+  if(it == Data_Type_Base<Key_T>::casters_.end())
   {
     std::string s = "Derived class ";
     s += klass.name().str();

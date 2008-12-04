@@ -24,8 +24,9 @@ namespace detail
 class Module;
 
 //! The base class for all instantiations of Data_Type.
+template<typename Key_T = Static_Data_Key>
 class Data_Type_Base
-  : public Module_impl<Class, Data_Type_Base>
+  : public Module_impl<Class, Data_Type_Base<Key_T> >
 {
 public:
   //! Default constructor.
@@ -131,7 +132,7 @@ Rice::Data_Type<T, Static_Data_Key> define_class(
  */
 template<typename T, typename Key_T>
 class Data_Type
-  : public Module_impl<Data_Type_Base, Data_Type<T, Key_T> >
+  : public Module_impl<Data_Type_Base<Key_T>, Data_Type<T, Key_T> >
 {
 public:
   //! The C++ type being held.
