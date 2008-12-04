@@ -3,6 +3,7 @@
 
 #include "Class_defn.hpp"
 #include "Data_Type_fwd.hpp"
+#include "Static_Data_Key.hpp"
 #include "detail/ruby.hpp"
 #include <memory>
 #include <map>
@@ -36,7 +37,7 @@ public:
   //! Destructor.
   virtual ~Data_Type_Base() = 0;
 
-  // Must be public to workaround gcc 3.3
+  // TODO: what was this comment?
   typedef std::map<VALUE, detail::Abstract_Caster *> Casters;
 
 protected:
@@ -51,10 +52,19 @@ protected:
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
-template<typename T>
-Rice::Data_Type<T> define_class_under(
+template<typename T, typename Key_T>
+Rice::Data_Type<T, Key_T> define_class_under(
     Object module,
-    char const * name);
+    char const * name,
+    Key_T key);
+
+template<typename T>
+Rice::Data_Type<T, Static_Data_Key> define_class_under(
+    Object module,
+    char const * name)
+{
+  return define_class_under<T>(module, name, Static_Data_Key());
+}
 
 //! Define a new data class in the namespace given by module.
 /*! The class with have a base class determined by Base_T (specifically,
@@ -64,19 +74,36 @@ Rice::Data_Type<T> define_class_under(
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
-template<typename T, typename Base_T>
-Rice::Data_Type<T> define_class_under(
+template<typename T, typename Base_T, typename Key_T>
+Rice::Data_Type<T, Key_T> define_class_under(
     Object module,
-    char const * name);
+    char const * name,
+    Key_T key);
+
+template<typename T, typename Base_T>
+Rice::Data_Type<T, Static_Data_Key> define_class_under(
+    Object module,
+    char const * name)
+{
+  return define_class_under<T, Base_T>(module, name, Static_Data_Key());
+}
 
 //! Define a new data class in the default namespace.
 /*! The class will have a base class of Object.
  *  \param T the C++ type of the wrapped class.
  *  \return the new class.
  */
+template<typename T, typename Key_T>
+Rice::Data_Type<T, Key_T> define_class(
+    char const * name,
+    Key_T key);
+
 template<typename T>
-Rice::Data_Type<T> define_class(
-    char const * name);
+Rice::Data_Type<T, Static_Data_Key> define_class(
+    char const * name)
+{
+  return define_class<T>(name, Static_Data_Key());
+}
 
 //! Define a new data class in the default namespace.
 /*! The class with have a base class determined by Base_T (specifically,
@@ -86,18 +113,25 @@ Rice::Data_Type<T> define_class(
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
-template<typename T, typename Base_T>
-Rice::Data_Type<T> define_class(
-    char const * name);
+template<typename T, typename Base_T, typename Key_T>
+Rice::Data_Type<T, Key_T> define_class(
+    char const * name,
+    Key_T key);
 
+template<typename T, typename Base_T>
+Rice::Data_Type<T, Static_Data_Key> define_class(
+    char const * name)
+{
+  return define_class<T, Base_T>(name, Static_Data_Key());
+}
 
 //! A mechanism for binding ruby types to C++ types.
 /*! This class binds run-time types (Ruby VALUEs) to compile-time types
  *  (C++ types).  The binding can occur only once.
  */
-template<typename T>
+template<typename T, typename Key_T>
 class Data_Type
-  : public Module_impl<Data_Type_Base, Data_Type<T> >
+  : public Module_impl<Data_Type_Base, Data_Type<T, Key_T> >
 {
 public:
   //! The C++ type being held.
@@ -147,7 +181,7 @@ public:
    *  \endcode
    */
   template<typename Constructor_T>
-  Data_Type<T> & define_constructor(
+  Data_Type<T, Key_T> & define_constructor(
       Constructor_T constructor);
 
   //! Convert ruby object x to type T.
@@ -172,26 +206,30 @@ protected:
   template<typename Base_T>
   static Data_Type bind(Module const & klass);
 
-  template<typename T_>
-  friend Rice::Data_Type<T_> define_class_under(
+  template<typename T_, typename Key_T_>
+  friend Rice::Data_Type<T_, Key_T_> define_class_under(
       Object module,
-      char const * name);
+      char const * name,
+      Key_T_ key);
 
-  template<typename T_, typename Base_T_>
-  friend Rice::Data_Type<T_> define_class_under(
+  template<typename T_, typename Base_T_, typename Key_T_>
+  friend Rice::Data_Type<T_, Key_T_> define_class_under(
       Object module,
-      char const * name);
+      char const * name,
+      Key_T_ key);
 
-  template<typename T_>
-  friend Rice::Data_Type<T_> Rice::define_class(
-      char const * name);
+  template<typename T_, typename Key_T_>
+  friend Rice::Data_Type<T_, Key_T_> Rice::define_class(
+      char const * name,
+      Key_T_ key);
 
-  template<typename T_, typename Base_T_>
-  friend Rice::Data_Type<T_> define_class(
-      char const * name);
+  template<typename T_, typename Base_T_, typename Key_T_>
+  friend Rice::Data_Type<T_, Key_T_> define_class(
+      char const * name,
+      Key_T_ key);
 
 private:
-  template<typename T_>
+  template<typename T_, typename Key_T_>
   friend class Data_Type;
 
   virtual detail::Abstract_Caster * caster() const;

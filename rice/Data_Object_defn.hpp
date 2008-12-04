@@ -4,6 +4,7 @@
 #include "Object_defn.hpp"
 #include "Data_Type_fwd.hpp"
 #include "Allocation_Strategies.hpp"
+#include "Static_Data_Key.hpp"
 #include "ruby_mark.hpp"
 #include "detail/to_ruby.hpp"
 #include "detail/ruby.hpp"
@@ -47,7 +48,7 @@ struct Default_Mark_Function
  *    Data_Object<Foo> foo2(v, rb_cFoo);
  *  \endcode
  */
-template<typename T>
+template<typename T, typename Key_T = Static_Data_Key>
 class Data_Object
   : public Object
 {
@@ -90,10 +91,11 @@ public:
    *  \param value the Ruby object to unwrap.
    *  \param klass the expected class of the object.
    */
-  template<typename U>
+  template<typename T_, typename Key_T_>
   Data_Object(
       Object value,
-      Data_Type<U> const & klass = Data_Type<T>::klass());
+      Data_Type<T_, Key_T_> const & klass =
+        Data_Type<T_>::klass());
 
   //! Make a copy of a Data_Object
   /*! \param other the Data_Object to copy.
@@ -107,11 +109,11 @@ public:
   //! Swap with another data object of the same type
   /*! \param ref the object with which to swap.
    */
-  template<typename U>
-  void swap(Data_Object<U> & ref);
+  template<typename T_, typename Key_T_>
+  void swap(Data_Object<T_, Key_T_> & ref);
 
 private:
-  static void check_cpp_type(Data_Type<T> const & klass);
+  static void check_cpp_type(Data_Type<T, Key_T> const & klass);
 
 private:
   T * obj_;
@@ -119,10 +121,10 @@ private:
 
 namespace detail
 {
-  template<typename T>
-  struct to_ruby_<Data_Object<T> >
+  template<typename T, typename Key_T>
+  struct to_ruby_<Data_Object<T, Key_T> >
   {
-    static Rice::Object convert(Data_Object<T> const & x);
+    static Rice::Object convert(Data_Object<T, Key_T> const & x);
   };
 }
 

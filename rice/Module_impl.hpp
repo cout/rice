@@ -11,7 +11,6 @@ namespace Rice
 
 class Module;
 class Class;
-template<typename T> class Data_Type;
 
 /*! Holds all member data of Module_impl so it only exists in one place
  *  in the hierarchy.

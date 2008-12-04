@@ -25,11 +25,11 @@ inline VALUE data_wrap_struct(
   return Data_Wrap_Struct(klass, mark, free, obj);
 }
 
-template<typename T>
+template<typename Key_T, typename T>
 inline VALUE wrap(
     VALUE klass,
-    typename Data_Object<T>::Ruby_Data_Func mark,
-    typename Data_Object<T>::Ruby_Data_Func free,
+    typename Data_Object<T, Key_T>::Ruby_Data_Func mark,
+    typename Data_Object<T, Key_T>::Ruby_Data_Func free,
     T * obj)
 {
   // We cast to obj void* here before passing to Data_Wrap_Struct,
@@ -62,36 +62,36 @@ inline T * unwrap(VALUE value)
 
 } // namespace Rice
 
-template<typename T>
-inline Rice::Data_Object<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Object<T, Key_T>::
 Data_Object(
     T * obj,
     VALUE klass,
     Ruby_Data_Func mark_func,
     Ruby_Data_Func free_func)
-  : Object(detail::wrap(klass, mark_func, free_func, obj))
+  : Object(detail::wrap<Key_T>(klass, mark_func, free_func, obj))
   , obj_(obj)
 {
 }
 
-template<typename T>
-inline Rice::Data_Object<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Object<T, Key_T>::
 Data_Object(
     Object value)
   : Object(value)
   , obj_(detail::unwrap<T>(value))
 {  
-  Data_Type<T> klass;
+  Data_Type<T, Key_T> klass;
   check_cpp_type(klass);
   detail::check_ruby_type(value, klass, true);
 }
 
-template<typename T>
-template<typename U>
-inline Rice::Data_Object<T>::
+template<typename T, typename Key_T>
+template<typename T_, typename Key_T_>
+inline Rice::Data_Object<T, Key_T>::
 Data_Object(
     Object value,
-    Data_Type<U> const & klass)
+    Data_Type<T_, Key_T_> const & klass)
   : Object(value)
   , obj_(detail::unwrap<T>(value))
 {  
@@ -99,32 +99,32 @@ Data_Object(
   detail::check_ruby_type(value, klass, true);
 }
 
-template<typename T>
-inline Rice::Data_Object<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Object<T, Key_T>::
 Data_Object(Data_Object const & other)
   : Object(other.value())
   , obj_(other.obj_)
 {
 }
 
-template<typename T>
-template<typename U>
-inline void Rice::Data_Object<T>::
-swap(Data_Object<U> & ref)
+template<typename T, typename Key_T>
+template<typename T_, typename Key_T_>
+inline void Rice::Data_Object<T, Key_T>::
+swap(Data_Object<T_, Key_T_> & ref)
 {
   std::swap(obj_, ref.obj_);
   Object::swap(ref);
 }
 
-template<typename T>
-inline void Rice::Data_Object<T>::
-check_cpp_type(Data_Type<T> const & /* klass */)
+template<typename T, typename Key_T>
+inline void Rice::Data_Object<T, Key_T>::
+check_cpp_type(Data_Type<T, Key_T> const & /* klass */)
 {
 }
 
-template<typename T>
-Rice::Object Rice::detail::to_ruby_<Rice::Data_Object<T> >::
-convert(Rice::Data_Object<T> const & x)
+template<typename T, typename Key_T>
+Rice::Object Rice::detail::to_ruby_<Rice::Data_Object<T, Key_T> >::
+convert(Rice::Data_Object<T, Key_T> const & x)
 {
   return x;
 }

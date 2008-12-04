@@ -13,20 +13,20 @@
 #include <stdexcept>
 #include <typeinfo>
 
-template<typename T>
-VALUE Rice::Data_Type<T>::klass_ = Qnil;
+template<typename T, typename Key_T>
+VALUE Rice::Data_Type<T, Key_T>::klass_ = Qnil;
 
-template<typename T>
-std::auto_ptr<Rice::detail::Abstract_Caster> Rice::Data_Type<T>::caster_;
+template<typename T, typename Key_T>
+std::auto_ptr<Rice::detail::Abstract_Caster> Rice::Data_Type<T, Key_T>::caster_;
 
-template<typename T>
+template<typename T, typename Key_T>
 template<typename Base_T>
-inline Rice::Data_Type<T> Rice::Data_Type<T>::
+inline Rice::Data_Type<T, Key_T> Rice::Data_Type<T, Key_T>::
 bind(Module const & klass)
 {
   if(klass.value() == klass_)
   {
-    return Data_Type<T>();
+    return Data_Type<T, Key_T>();
   }
 
   if(is_bound())
@@ -61,11 +61,11 @@ bind(Module const & klass)
   detail::Abstract_Caster * base_caster = Data_Type<Base_T>().caster();
   caster_.reset(new detail::Caster<T, Base_T>(base_caster, klass));
   Data_Type_Base::casters_.insert(std::make_pair(klass, caster_.get()));
-  return Data_Type<T>();
+  return Data_Type<T, Key_T>();
 }
 
-template<typename T>
-inline Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Type<T, Key_T>::
 Data_Type()
   : Module_impl<Data_Type_Base, Data_Type<T> >(
       klass_ == Qnil ? rb_cObject : klass_)
@@ -76,25 +76,25 @@ Data_Type()
   }
 }
 
-template<typename T>
-inline Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Type<T, Key_T>::
 Data_Type(Module const & klass)
-  : Module_impl<Data_Type_Base, Data_Type<T> >(
+  : Module_impl<Data_Type_Base, Data_Type<T, Key_T> >(
       klass)
 {
   this->bind<void>(klass);
 }
 
-template<typename T>
-inline Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline Rice::Data_Type<T, Key_T>::
 ~Data_Type()
 {
   unbound_instances().erase(this);
 }
 
-template<typename T>
+template<typename T, typename Key_T>
 Rice::Module
-Rice::Data_Type<T>::
+Rice::Data_Type<T, Key_T>::
 klass() {
   if(is_bound())
   {
@@ -109,17 +109,17 @@ klass() {
   }
 }
 
-template<typename T>
-Rice::Data_Type<T> & Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+Rice::Data_Type<T, Key_T> & Rice::Data_Type<T, Key_T>::
 operator=(Module const & klass)
 {
   this->bind<void>(klass);
   return *this;
 }
 
-template<typename T>
+template<typename T, typename Key_T>
 template<typename Constructor_T>
-inline Rice::Data_Type<T> & Rice::Data_Type<T>::
+inline Rice::Data_Type<T, Key_T> & Rice::Data_Type<T, Key_T>::
 define_constructor(
     Constructor_T constructor)
 {
@@ -134,8 +134,8 @@ define_constructor(
   return *this;
 }
 
-template<typename T>
-inline T * Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline T * Rice::Data_Type<T, Key_T>::
 from_ruby(Object x)
 {
   check_is_bound();
@@ -173,15 +173,16 @@ from_ruby(Object x)
   }
 }
 
-template<typename T>
-inline bool Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline bool Rice::Data_Type<T, Key_T>::
 is_bound()
 {
   return klass_ != Qnil;
 }
 
-template<typename T>
-inline Rice::detail::Abstract_Caster * Rice::Data_Type<T>::
+template<typename T, typename Key_T>
+inline Rice::detail::Abstract_Caster *
+Rice::Data_Type<T, Key_T>::
 caster() const
 {
   check_is_bound();
@@ -198,8 +199,8 @@ caster() const
   return 0;
 }
 
-template<typename T>
-void Data_Type<T>::
+template<typename T, typename Key_T>
+void Data_Type<T, Key_T>::
 check_is_bound()
 {
   if(!is_bound())
@@ -214,48 +215,52 @@ check_is_bound()
 
 } // Rice
 
-template<typename T>
-inline Rice::Data_Type<T> Rice::
+template<typename T, typename Key_T>
+inline Rice::Data_Type<T, Key_T> Rice::
 define_class_under(
     Object module,
-    char const * name)
+    char const * name,
+    Key_T /* key */)
 {
   Class c(define_class_under(module, name, rb_cObject));
   c.undef_creation_funcs();
-  return Data_Type<T>::template bind<void>(c);
+  return Data_Type<T, Key_T>::template bind<void>(c);
 }
 
-template<typename T, typename Base_T>
-inline Rice::Data_Type<T> Rice::
+template<typename T, typename Base_T, typename Key_T>
+inline Rice::Data_Type<T, Key_T> Rice::
 define_class_under(
     Object module,
-    char const * name)
+    char const * name,
+    Key_T /* key */)
 {
   Data_Type<Base_T> base_dt;
   Class c(define_class_under(module, name, base_dt));
   c.undef_creation_funcs();
-  return Data_Type<T>::template bind<Base_T>(c);
+  return Data_Type<T, Key_T>::template bind<Base_T>(c);
 }
 
-template<typename T>
-inline Rice::Data_Type<T> Rice::
+template<typename T, typename Key_T>
+inline Rice::Data_Type<T, Key_T> Rice::
 define_class(
-    char const * name)
+    char const * name,
+    Key_T /* key */)
 {
   Class c(define_class(name, rb_cObject));
   c.undef_creation_funcs();
-  return Data_Type<T>::template bind<void>(c);
+  return Data_Type<T, Key_T>::template bind<void>(c);
 }
 
-template<typename T, typename Base_T>
-inline Rice::Data_Type<T> Rice::
+template<typename T, typename Base_T, typename Key_T>
+inline Rice::Data_Type<T, Key_T> Rice::
 define_class(
-    char const * name)
+    char const * name,
+    Key_T /* key */)
 {
   Data_Type<Base_T> base_dt;
   Class c(define_class(name, base_dt));
   c.undef_creation_funcs();
-  return Data_Type<T>::template bind<Base_T>(c);
+  return Data_Type<T, Key_T>::template bind<Base_T>(c);
 }
 
 #endif // Rice__Data_Type__ipp_
