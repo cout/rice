@@ -47,6 +47,19 @@ struct Default_Mark_Function
  *    // Unwrap:
  *    Data_Object<Foo> foo2(v, rb_cFoo);
  *  \endcode
+ *
+ *  The Key_T template parameter is used to ensure that multiple
+ *  translation units do not accidentally overwrite each others' static
+ *  data.  It defaults to Static_Data_Key, which prevents multiple
+ *  translation units from sharing data.
+ *
+ *  If data sharing is desired, Key_T can be explicitly specified, e.g.:
+ *  \code
+ *    class Foo;
+ *    class My_Key;
+ *    Data_Object<Foo, My_Key> rb_cFoo;
+ *  \endcode
+ *
  */
 template<typename T, typename Key_T = Static_Data_Key>
 class Data_Object

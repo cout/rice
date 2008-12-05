@@ -49,7 +49,9 @@ protected:
 
 //! Define a new data class in the namespace given by module.
 /*! The class will have a base class of Object.
+ *
  *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
@@ -59,6 +61,14 @@ Rice::Data_Type<T, Key_T> define_class_under(
     char const * name,
     Key_T key);
 
+//! Define a new data class in the namespace given by module.
+/*! The class will have a base class of Object.  The resulting Data_Type
+ *  will not be sharable with other translation units.
+ *
+ *  \param T the C++ type of the wrapped class.
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
 template<typename T>
 Rice::Data_Type<T, Static_Data_Key> define_class_under(
     Object module,
@@ -71,7 +81,9 @@ Rice::Data_Type<T, Static_Data_Key> define_class_under(
 /*! The class with have a base class determined by Base_T (specifically,
  *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
  *  have been registered using define_class<> or define_class_under<>.
+ *
  *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
@@ -81,6 +93,18 @@ Rice::Data_Type<T, Key_T> define_class_under(
     char const * name,
     Key_T key);
 
+//! Define a new data class in the namespace given by module.
+/*! The class with have a base class determined by Base_T (specifically,
+ *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
+ *  have been registered using define_class<> or define_class_under<>.
+ *
+ *  The resulting Data_Type will not be sharable with other translation
+ *  units.
+ *
+ *  \param T the C++ type of the wrapped class.
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
 template<typename T, typename Base_T>
 Rice::Data_Type<T, Static_Data_Key> define_class_under(
     Object module,
@@ -91,7 +115,9 @@ Rice::Data_Type<T, Static_Data_Key> define_class_under(
 
 //! Define a new data class in the default namespace.
 /*! The class will have a base class of Object.
+ *
  *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
  *  \return the new class.
  */
 template<typename T, typename Key_T>
@@ -99,6 +125,14 @@ Rice::Data_Type<T, Key_T> define_class(
     char const * name,
     Key_T key);
 
+//! Define a new data class in the default namespace.
+/*! The class will have a base class of Object.  The resulting Data_Type
+ *  will not be sharable with other translation units.
+ *
+ *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
+ *  \return the new class.
+ */
 template<typename T>
 Rice::Data_Type<T, Static_Data_Key> define_class(
     char const * name)
@@ -110,7 +144,9 @@ Rice::Data_Type<T, Static_Data_Key> define_class(
 /*! The class with have a base class determined by Base_T (specifically,
  *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
  *  have been registered using define_class<> or define_class_under<>.
+ *
  *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
  *  \param module the the Module in which to define the class.
  *  \return the new class.
  */
@@ -119,6 +155,19 @@ Rice::Data_Type<T, Key_T> define_class(
     char const * name,
     Key_T key);
 
+//! Define a new data class in the default namespace.
+/*! The class with have a base class determined by Base_T (specifically,
+ *  Data_Type<Base_T>::klass).  Therefore, the type Base_T must already
+ *  have been registered using define_class<> or define_class_under<>.
+ *
+ *  The resulting Data_Type will not be sharable with other translation
+ *  units.
+ *
+ *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data (see Data_Type<>).
+ *  \param module the the Module in which to define the class.
+ *  \return the new class.
+ */
 template<typename T, typename Base_T>
 Rice::Data_Type<T, Static_Data_Key> define_class(
     char const * name)
@@ -129,6 +178,21 @@ Rice::Data_Type<T, Static_Data_Key> define_class(
 //! A mechanism for binding ruby types to C++ types.
 /*! This class binds run-time types (Ruby VALUEs) to compile-time types
  *  (C++ types).  The binding can occur only once.
+ *
+ *  The Key_T template parameter is used to ensure that multiple
+ *  translation units do not accidentally overwrite each others' static
+ *  data.  It defaults to Static_Data_Key, which prevents multiple
+ *  translation units from sharing data.
+ *
+ *  If data sharing is desired, Key_T can be explicitly specified, e.g.:
+ *  \code
+ *    class Foo;
+ *    class My_Key;
+ *    Data_Type<Foo, My_Key> rb_cFoo;
+ *  \endcode
+ *
+ *  \param T the C++ type of the wrapped class.
+ *  \param Key_T a key used for accessing static data.
  */
 template<typename T, typename Key_T>
 class Data_Type
