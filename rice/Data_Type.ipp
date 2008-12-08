@@ -175,7 +175,7 @@ from_ruby(Object x)
     return obj.get();
   }
 
-  Data_Type_Base<Key_T>::Casters::const_iterator it(
+  typename Data_Type_Base<Key_T>::Casters::const_iterator it(
       Data_Type_Base<Key_T>::casters_.find(klass));
   if(it == Data_Type_Base<Key_T>::casters_.end())
   {
