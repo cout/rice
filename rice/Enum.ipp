@@ -7,8 +7,9 @@
 #include "protect.hpp"
 #include <memory>
 
-template<typename Enum_T>
-long Rice::Default_Enum_Traits<Enum_T>::as_long(Enum_T value)
+template<typename Enum_T, typename Key_T>
+long Rice::Default_Enum_Traits<Enum_T, Key_T>::
+as_long(Enum_T value)
 {
   return static_cast<long>(value);
 }
@@ -16,7 +17,7 @@ long Rice::Default_Enum_Traits<Enum_T>::as_long(Enum_T value)
 template<typename Enum_T, typename Enum_Traits>
 Rice::Enum<Enum_T, Enum_Traits>::
 Enum()
-  : Module_impl<Data_Type<Enum_T>, Enum<Enum_T, Enum_Traits> >()
+  : Module_impl<Base, Enum<Enum_T, Enum_Traits> >()
   , enums_()
   , enums_guard_(&enums_)
   , names_()
@@ -29,7 +30,7 @@ Rice::Enum<Enum_T, Enum_Traits>::
 Enum(
     char const * name,
     Module module)
-  : Module_impl<Data_Type<Enum_T>, Enum<Enum_T, Enum_Traits> >()
+  : Module_impl<Base, Enum<Enum_T, Enum_Traits> >()
   , enums_()
   , enums_guard_(&enums_)
   , names_()
@@ -41,7 +42,7 @@ Enum(
 template<typename Enum_T, typename Enum_Traits>
 Rice::Enum<Enum_T, Enum_Traits>::
 Enum(Enum<Enum_T, Enum_Traits> const & other)
-  : Module_impl<Data_Type<Enum_T>, Enum<Enum_T, Enum_Traits> >(other)
+  : Module_impl<Base, Enum<Enum_T, Enum_Traits> >(other)
   , enums_(other.enums_)
   , enums_guard_(&enums_)
   , names_(other.names_)
@@ -114,7 +115,7 @@ template<typename Enum_T, typename Enum_Traits>
 void Rice::Enum<Enum_T, Enum_Traits>::
 swap(Enum<Enum_T, Enum_Traits> & other)
 {
-  Data_Type<Enum_T>::swap(other);
+  Base::swap(other);
   enums_.swap(other.enums_);
   names_.swap(other.names_);
 }
@@ -137,7 +138,7 @@ template<typename Enum_T, typename Enum_Traits>
 Rice::Object Rice::Enum<Enum_T, Enum_Traits>::
 to_s(Object self)
 {
-  Data_Type<Enum_T> klass;
+  Base klass;
   Rice::Data_Object<Enum_T> m(self, klass);
   Object enum_class = rb_class_of(m);
   Hash names(rb_iv_get(enum_class, "names"));
@@ -177,7 +178,7 @@ compare(Object lhs, Object rhs)
         rhs_name.c_str());
   }
 
-  Data_Type<Enum_T> klass;
+  Base klass;
   Rice::Data_Object<Enum_T> l(lhs, klass);
   Rice::Data_Object<Enum_T> r(rhs, klass);
 
@@ -211,7 +212,7 @@ template<typename Enum_T, typename Enum_Traits>
 Rice::Object Rice::Enum<Enum_T, Enum_Traits>::
 to_i(Object self)
 {
-  Data_Type<Enum_T> klass;
+  Base klass;
   Rice::Data_Object<Enum_T> m(self, klass);
   return LONG2NUM(Enum_Traits::as_long(*m));
 }
@@ -228,7 +229,7 @@ Rice::Object Rice::Enum<Enum_T, Enum_Traits>::
 from_int(Class klass, Object i)
 {
   using ::from_ruby; // Workaround for g++ 3.3.3
-  Rice::Data_Object<Enum_T> m(
+  typename Base::Object_Type m(
       new Enum_T(static_cast<Enum_T>(from_ruby<long>(i))),
       klass);
   return m.value();

@@ -13,11 +13,13 @@ namespace Rice
 {
 
 //! Default traits for the Enum class template.
-template<typename Enum_T>
+template<typename Enum_T, typename Key_T = Static_Data_Key>
 struct Default_Enum_Traits
 {
   //! Converts the enum value to a long.
   static long as_long(Enum_T value);
+
+  typedef Key_T Key;
 };
 
 /*!
@@ -45,8 +47,13 @@ struct Default_Enum_Traits
  */
 template<typename Enum_T, typename Enum_Traits = Default_Enum_Traits<Enum_T> >
 class Enum
-  : public Module_impl<Data_Type<Enum_T>, Enum<Enum_T, Enum_Traits> >
+  : public Module_impl<
+      Data_Type<Enum_T, typename Enum_Traits::Key>,
+      Enum<Enum_T, Enum_Traits> >
 {
+private:
+  typedef Data_Type<Enum_T, typename Enum_Traits::Key> Base;
+
 public:
   //! Default constructor.
   Enum();
