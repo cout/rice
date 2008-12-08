@@ -6,13 +6,13 @@
 #include "demangle.hpp"
 #include <typeinfo>
 
-template<typename T>
-T Rice::detail::from_ruby_<T>::
+template<typename T, typename Key_T>
+T Rice::detail::from_ruby_<T, Key_T>::
 convert(Rice::Object x)
 {
   if(rb_type(x.value()) == T_DATA)
   {
-    return *Data_Type<T>::from_ruby(x);
+    return *Data_Type<T, Key_T>::from_ruby(x);
   }
   else
   {
@@ -24,13 +24,13 @@ convert(Rice::Object x)
   }
 }
 
-template<typename T>
-T * Rice::detail::from_ruby_<T *>::
+template<typename T, typename Key_T>
+T * Rice::detail::from_ruby_<T *, Key_T>::
 convert(Rice::Object x)
 {
   if(rb_type(x.value()) == T_DATA)
   {
-    return Data_Type<T>::from_ruby(x);
+    return Data_Type<T, Key_T>::from_ruby(x);
   }
   else
   {
@@ -42,18 +42,18 @@ convert(Rice::Object x)
   }
 }
 
-template<typename T>
+template<typename T, typename Key_T>
 T const * Rice::detail::from_ruby_<T const *>::
 convert(Rice::Object x)
 {
-  return from_ruby<T *>(x);
+  return from_ruby<T *, Key_T>(x);
 }
 
-template<typename T>
+template<typename T, typename Key_T>
 T & Rice::detail::from_ruby_<T &>::
 convert(Rice::Object x)
 {
-  return *from_ruby<T *>(x);
+  return *from_ruby<T *, Key_T>(x);
 }
 
 #endif // Rice__detail__from_ruby__ipp_

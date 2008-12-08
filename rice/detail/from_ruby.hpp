@@ -5,7 +5,7 @@ namespace Rice
 {
   namespace detail
   {
-    template<typename T>
+    template<typename T, typename Key_T>
     struct from_ruby_
     {
       typedef T Retval_T;
@@ -13,24 +13,24 @@ namespace Rice
       static T convert(Rice::Object x);
     };
 
-    template<typename T>
-    struct from_ruby_<T *>
+    template<typename T, typename Key_T>
+    struct from_ruby_<T *, Key_T>
     {
       typedef T * Retval_T;
 
       static T * convert(Rice::Object x);
     };
 
-    template<typename T>
-    struct from_ruby_<T const *>
+    template<typename T, typename Key_T>
+    struct from_ruby_<T const *, Key_T>
     {
       typedef T const * Retval_T;
 
       static T const * convert(Rice::Object x);
     };
 
-    template<typename T>
-    struct from_ruby_<T &>
+    template<typename T, typename Key_T>
+    struct from_ruby_<T &, Key_T>
     {
       typedef T & Retval_T;
 
