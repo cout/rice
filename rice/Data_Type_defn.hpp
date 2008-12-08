@@ -3,6 +3,7 @@
 
 #include "Class_defn.hpp"
 #include "Data_Type_fwd.hpp"
+#include "Data_Object.hpp"
 #include "Static_Data_Key.hpp"
 #include "detail/ruby.hpp"
 #include <memory>
@@ -201,6 +202,8 @@ class Data_Type
 public:
   //! The C++ type being held.
   typedef T Type;
+
+  typedef Data_Object<T, Key_T> Object_Type;
 
   //! Default constructor which does not bind.
   /*! No member functions must be called on this Data_Type except bind,
