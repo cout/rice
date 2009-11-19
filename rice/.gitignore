@@ -1,3 +1,7 @@
 *.a
+*.la
 stamp-h1
 config.hpp*
+README.doxygen
+.libs
+
