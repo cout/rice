@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS = foreign 1.5
+ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = rice test sample ruby
 
 include doxygen.am

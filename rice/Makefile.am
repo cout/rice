@@ -1,6 +1,6 @@
-lib_LIBRARIES = librice.a
+lib_LTLIBRARIES = librice.la
 
-librice_a_SOURCES = \
+librice_la_SOURCES = \
 Class.cpp \
 Data_Type.cpp \
 Director.cpp \
