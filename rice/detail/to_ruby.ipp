@@ -3,12 +3,11 @@
 template<typename T>
 Rice::Object
 Rice::detail::to_ruby_<T>::
-convert(T & x)
+convert(T const & x)
 {
   if(Data_Type<T>::is_bound())
   {
-    Data_Object<T> obj(&x);
-    return obj;
+    return Rice::Data_Object<T >(new T(x), Rice::Data_Type<T >::klass());
   }
   else
   {

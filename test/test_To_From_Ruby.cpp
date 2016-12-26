@@ -1,6 +1,8 @@
 #include "unittest.hpp"
 #include "rice/to_from_ruby.hpp"
 #include "rice/String.hpp"
+#include "rice/Array.hpp"
+#include "rice/Hash.hpp"
 #include <limits>
 #include <cmath>
 
@@ -188,9 +190,9 @@ TESTCASE(float_from_ruby)
       std::numeric_limits<float>::max(),
       from_ruby<float>(rb_float_new(std::numeric_limits<float>::max())));
   ASSERT(
-      isnan(from_ruby<float>(rb_float_new(std::numeric_limits<float>::quiet_NaN()))));
+      std::isnan(from_ruby<float>(rb_float_new(std::numeric_limits<float>::quiet_NaN()))));
   ASSERT(
-      isnan(from_ruby<float>(rb_float_new(std::numeric_limits<float>::signaling_NaN()))));
+      std::isnan(from_ruby<float>(rb_float_new(std::numeric_limits<float>::signaling_NaN()))));
   ASSERT_EQUAL(
       std::numeric_limits<float>::epsilon(),
       from_ruby<float>(rb_float_new(std::numeric_limits<float>::epsilon())));
@@ -229,9 +231,9 @@ TESTCASE(double_from_ruby)
       std::numeric_limits<double>::max(),
       from_ruby<double>(rb_float_new(std::numeric_limits<double>::max())));
   ASSERT(
-      isnan(from_ruby<double>(rb_float_new(std::numeric_limits<double>::quiet_NaN()))));
+      std::isnan(from_ruby<double>(rb_float_new(std::numeric_limits<double>::quiet_NaN()))));
   ASSERT(
-      isnan(from_ruby<double>(rb_float_new(std::numeric_limits<double>::signaling_NaN()))));
+      std::isnan(from_ruby<double>(rb_float_new(std::numeric_limits<double>::signaling_NaN()))));
   ASSERT_EQUAL(
       std::numeric_limits<double>::epsilon(),
       from_ruby<double>(rb_float_new(std::numeric_limits<double>::epsilon())));
@@ -245,8 +247,33 @@ TESTCASE(char_const_ptr_to_ruby)
 
 TESTCASE(char_const_ptr_from_ruby)
 {
+  char const* foo = "foo";
   ASSERT_EQUAL("", from_ruby<char const *>(rb_str_new2("")));
-  ASSERT_EQUAL("foo", from_ruby<char const *>(rb_str_new2("foo")));
+  ASSERT_EQUAL(foo, from_ruby<char const *>(rb_str_new2("foo")));
+}
+
+TESTCASE(char_from_ruby_single_character_string)
+{
+  ASSERT_EQUAL('x', from_ruby<char>(rb_str_new2("x")));
+}
+
+TESTCASE(char_from_ruby_longer_string)
+{
+  ASSERT_EXCEPTION(
+    std::invalid_argument,
+    from_ruby<char>(rb_str_new2("xy"))
+  );
+}
+
+TESTCASE(char_from_ruby_fixnum)
+{
+  ASSERT_EQUAL('1', from_ruby<char>(INT2NUM(49)));
+}
+
+TESTCASE(char_star_from_ruby)
+{
+  const char* expected = "my string";
+  ASSERT_EQUAL(expected, from_ruby<const char*>(rb_str_new2("my string")));
 }
 
 TESTCASE(std_string_to_ruby)
@@ -261,3 +288,41 @@ TESTCASE(std_string_from_ruby)
   ASSERT_EQUAL(std::string("foo"), from_ruby<std::string>(rb_str_new2("foo")));
 }
 
+TESTCASE(std_string_to_ruby_with_binary)
+{
+  Rice::String got = to_ruby(std::string("\000test", 5));
+
+  ASSERT_EQUAL(String(std::string("\000test", 5)), got);
+  ASSERT_EQUAL(5, got.length());
+}
+
+TESTCASE(std_string_from_ruby_with_binary)
+{
+  std::string got = from_ruby<std::string>(rb_str_new("\000test", 5));
+  ASSERT_EQUAL(5, got.length());
+  ASSERT_EQUAL(std::string("\000test", 5), got);
+}
+
+TESTCASE(array_to_ruby)
+{
+  Array a(rb_ary_new());
+  ASSERT_EQUAL(a.value(), to_ruby(a).value());
+}
+
+TESTCASE(array_from_ruby)
+{
+  Array a(rb_ary_new());
+  ASSERT_EQUAL(a.value(), from_ruby<Array>(a).value());
+}
+
+TESTCASE(hash_to_ruby)
+{
+  Hash h(rb_hash_new());
+  ASSERT_EQUAL(h.value(), to_ruby(h).value());
+}
+
+TESTCASE(hash_from_ruby)
+{
+  Hash h(rb_hash_new());
+  ASSERT_EQUAL(h.value(), from_ruby<Hash>(h).value());
+}

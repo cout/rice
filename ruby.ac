@@ -1,6 +1,6 @@
 dnl Get a key from ruby's configuration table
 AC_DEFUN([RUBY_CONFIG], [
-          $RUBY -rrbconfig -e "puts(Config::CONFIG[['$1']] || '')"])
+          $RUBY -rrbconfig -e "puts(RbConfig::CONFIG[['$1']] || '')"])
 
 AC_DEFUN([RB_INIT_RUBY], [
 
@@ -30,6 +30,7 @@ RUBY_CONFIG_ARCH=`RUBY_CONFIG(arch)`
 RUBY_CONFIG_LIBDIR=`RUBY_CONFIG(libdir)`
 RUBY_CONFIG_BINDIR=`RUBY_CONFIG(bindir)`
 RUBY_CONFIG_RUBYHDRDIR=`RUBY_CONFIG(rubyhdrdir)`
+RUBY_CONFIG_RUBYARCHHDRDIR=`RUBY_CONFIG(rubyarchhdrdir)`
 RUBY_CONFIG_CFLAGS=`RUBY_CONFIG(CFLAGS)`
 RUBY_CONFIG_LIBS=`RUBY_CONFIG(LIBS)`
 RUBY_CONFIG_DLDLIBS=`RUBY_CONFIG(DLDLIBS)`
@@ -38,13 +39,11 @@ RUBY_CONFIG_LIBRUBYARG=`RUBY_CONFIG(LIBRUBYARG)`
 RUBY_CONFIG_LIBRUBYARG_STATIC=`RUBY_CONFIG(LIBRUBYARG_STATIC)`
 RUBY_CONFIG_CCDLFLAGS=`RUBY_CONFIG(CCDLFLAGS)`
 
-if test "x${RUBY_CONFIG_RUBYHDRDIR}x" != "xx"; then
-  # 1.9
-  RUBY_CPPFLAGS="-I${RUBY_CONFIG_RUBYHDRDIR}"
-  RUBY_CPPFLAGS="${RUBY_CPPFLAGS} -I${RUBY_CONFIG_RUBYHDRDIR}/${RUBY_CONFIG_ARCH}"
-else
-  # 1.8
-  RUBY_CPPFLAGS="-I${RUBY_CONFIG_ARCHDIR}"
+RUBY_CPPFLAGS="-I${RUBY_CONFIG_RUBYHDRDIR}"
+RUBY_CPPFLAGS="${RUBY_CPPFLAGS} -I${RUBY_CONFIG_RUBYHDRDIR}/${RUBY_CONFIG_ARCH}"
+
+if test "x${RUBY_CONFIG_RUBYARCHHDRDIR}x" != "xx"; then
+  RUBY_CPPFLAGS="${RUBY_CPPFLAGS} -I${RUBY_CONFIG_RUBYARCHHDRDIR}"
 fi
 AC_SUBST(RUBY_CPPFLAGS)
 
@@ -77,7 +76,7 @@ else
     RUBY_SITELIBDIR=`RUBY_CONFIG(sitelibdir)`
   else
     sitelibdir_no_prefix=`$RUBY -rrbconfig \
-    -e "include Config; \
+    -e "include RbConfig; \
     puts CONFIG[['sitelibdir']].sub(CONFIG[['prefix']], '')"`
     RUBY_SITELIBDIR="${prefix}/${sitelibdir_no_prefix}"
   fi
@@ -106,20 +105,6 @@ AC_CHECK_HEADERS(version.h,,,[
 AC_CHECK_HEADERS(env.h,,,[
 #include <ruby.h>
 ])
-
-dnl We need to set the LD flags to include the path to this Ruby's
-dnl library path so that this library check will work for ruby installs
-dnl sitting in unconvential locations
-save_ldflags="$LDFLAGS"
-LDFLAGS="$RUBY_LDFLAGS"
-
-AC_CHECK_LIB($RUBY_CONFIG_SO_NAME,
-             rb_class_boot,
-             [ AC_DEFINE(HAVE_RB_CLASS_BOOT, [], [
-              Define this macro if rb_class_boot is defined ]) ] )
-
-LDFLAGS="$save_ldflags"
-
 
 CPPFLAGS="${CPPFLAGS_save}"
 

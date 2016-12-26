@@ -1,5 +1,5 @@
 #ifndef Rice__ruby_struct__hpp_
-#define Ruplu__ruby_struct__hpp_
+#define Rice__ruby_struct__hpp_
 
 #include "Array.hpp"
 #include "Hash.hpp"
@@ -120,7 +120,7 @@ private:
 //! An instance of a Struct
 //! \sa Struct
 class Struct::Instance
-  : public Builtin_Object<RStruct, T_STRUCT>
+  : public Builtin_Object<T_STRUCT>
 {
 public:
   //! Create a new Instance of a Struct.

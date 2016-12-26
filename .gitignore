@@ -2,14 +2,18 @@ Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache
-config.guess
+rice/config.hpp
+rice/README.doxygen
+rice/detail/ruby_version_code.hpp
 config.log
 config.status
+config.guess
 config.sub
 configure
 depcomp
 install-sh
 missing
+test-driver
 pkg
 *.o
 *.so
@@ -18,4 +22,14 @@ pkg
 *~
 .*.swp
 doc
-rice/README.doxygen
+*.dSYM
+*.bundle
+
+# Msys / mingw generated files
+mkinstalldirs
+*.def
+*.exe
+
+ruby/lib/include
+ruby/lib/lib
+

@@ -17,7 +17,7 @@ template<typename T>
 VALUE Rice::Data_Type<T>::klass_ = Qnil;
 
 template<typename T>
-std::auto_ptr<Rice::detail::Abstract_Caster> Rice::Data_Type<T>::caster_;
+std_unique_ptr<Rice::detail::Abstract_Caster> Rice::Data_Type<T>::caster_;
 
 template<typename T>
 template<typename Base_T>
@@ -33,7 +33,7 @@ bind(Module const & klass)
   {
     std::string s;
     s = "Data type ";
-    s = typeid(T).name();
+    s += detail::demangle(typeid(T).name());
     s += " is already bound to a different type";
     throw std::runtime_error(s.c_str());
   }
@@ -60,7 +60,7 @@ bind(Module const & klass)
 
   detail::Abstract_Caster * base_caster = Data_Type<Base_T>().caster();
   caster_.reset(new detail::Caster<T, Base_T>(base_caster, klass));
-  Data_Type_Base::casters_.insert(std::make_pair(klass, caster_.get()));
+  Data_Type_Base::casters().insert(std::make_pair(klass, caster_.get()));
   return Data_Type<T>();
 }
 
@@ -121,7 +121,8 @@ template<typename T>
 template<typename Constructor_T>
 inline Rice::Data_Type<T> & Rice::Data_Type<T>::
 define_constructor(
-    Constructor_T constructor)
+    Constructor_T /* constructor */,
+    Arguments* arguments)
 {
   check_is_bound();
 
@@ -129,8 +130,34 @@ define_constructor(
   rb_define_alloc_func(
       static_cast<VALUE>(*this),
       detail::default_allocation_func<T>);
-  define_method("initialize", &Constructor_T::construct);
+  this->define_method(
+      "initialize",
+      &Constructor_T::construct,
+      arguments
+      );
 
+  return *this;
+}
+
+template<typename T>
+template<typename Constructor_T>
+inline Rice::Data_Type<T> & Rice::Data_Type<T>::
+define_constructor(
+    Constructor_T constructor,
+    Arg const& arg)
+{
+  Arguments* args = new Arguments();
+  args->add(arg);
+  return define_constructor(constructor, args);
+}
+
+
+template<typename T>
+template<typename Director_T>
+inline Rice::Data_Type<T>& Rice::Data_Type<T>::
+define_director()
+{
+  Rice::Data_Type<Director_T>::template bind<T>(*this);
   return *this;
 }
 
@@ -151,8 +178,8 @@ from_ruby(Object x)
     return obj.get();
   }
 
-  Data_Type_Base::Casters::const_iterator it = Data_Type_Base::casters_.begin();
-  Data_Type_Base::Casters::const_iterator end = Data_Type_Base::casters_.end();
+  Data_Type_Base::Casters::const_iterator it = Data_Type_Base::casters().begin();
+  Data_Type_Base::Casters::const_iterator end = Data_Type_Base::casters().end();
    
   // Finding the bound type that relates to the given klass is
   // a two step process. We iterate over the list of known type casters,
@@ -168,7 +195,7 @@ from_ruby(Object x)
 
   VALUE ancestors = rb_mod_ancestors(klass.value());
 
-  int earliest = RARRAY_LEN(ancestors) + 1;
+  long earliest = RARRAY_LEN(ancestors) + 1;
 
   int index;
   VALUE indexFound;
@@ -251,7 +278,7 @@ check_is_bound()
   {
     std::string s;
     s = "Data type ";
-    s = typeid(T).name();
+    s += detail::demangle(typeid(T).name());
     s += " is not bound";
     throw std::runtime_error(s.c_str());
   }
@@ -301,6 +328,38 @@ define_class(
   Class c(define_class(name, base_dt));
   c.undef_creation_funcs();
   return Data_Type<T>::template bind<Base_T>(c);
+}
+
+template<typename From_T, typename To_T>
+inline void 
+Rice::define_implicit_cast()
+{
+  // As Rice currently expects only one entry into
+  // this list for a given klass VALUE, we need to get
+  // the current caster for From_T and insert in our
+  // new caster as the head of the caster list
+
+  Class from_class = Data_Type<From_T>::klass().value();
+  Class to_class = Data_Type<To_T>::klass().value();
+
+  detail::Abstract_Caster* from_caster = 
+    Data_Type<From_T>::caster_.release();
+
+  detail::Abstract_Caster* new_caster = 
+    new detail::Implicit_Caster<To_T, From_T>(from_caster, to_class);
+
+  // Insert our new caster into the list for the from class
+  Data_Type_Base::casters().erase(from_class);
+  Data_Type_Base::casters().insert(
+    std::make_pair(
+      from_class,
+      new_caster
+    )
+  );
+
+  // And make sure the from_class has direct access to the
+  // updated caster list
+  Data_Type<From_T>::caster_.reset(new_caster);
 }
 
 #endif // Rice__Data_Type__ipp_

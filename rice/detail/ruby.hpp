@@ -16,16 +16,7 @@
 
 #include "ruby_version_code.hpp"
 
-// workaround for ruby 1.8.4, which defines eaccess and shouldn't
-#if RICE__RUBY_VERSION_CODE <= 184
-#define eaccess ruby_eaccess
-#endif
-
 #include <ruby.h>
-
-#if RICE__RUBY_VERSION_CODE <= 184
-#undef eaccess
-#endif
 
 #ifdef WIN32
 #include "win32.hpp"
@@ -65,6 +56,10 @@ extern "C" typedef VALUE (*RUBY_VALUE_FUNC)(VALUE);
 #define RHASH_TBL(hsh) RHASH(hsh)->tbl
 #endif
 
+#ifndef RCLASS_M_TBL
+#define RCLASS_M_TBL(c) RCLASS(c)->m_tbl
+#endif
+
 // ruby.h has a few defines that conflict with Visual Studio's STL
 #if defined(_MSC_VER)
   #undef write
@@ -72,17 +67,10 @@ extern "C" typedef VALUE (*RUBY_VALUE_FUNC)(VALUE);
   #undef bind
 #endif
 
-#if RICE__RUBY_VERSION_CODE < 190
-namespace Rice
-{
-  namespace detail
-  {
-    inline VALUE rb_errinfo() { return ruby_errinfo; }
-    inline void rb_set_errinfo(VALUE exc) { ruby_errinfo = exc; }
-  } // detail
-} // Rice
-#define rb_errinfo() ::Rice::detail::rb_errinfo()
-#define rb_set_errinfo(exc) ::Rice::detail::rb_set_errinfo(exc)
+#ifdef HAVE_CXX11
+#define std_unique_ptr std::unique_ptr
+#else
+#define std_unique_ptr std::auto_ptr
 #endif
 
 #endif // Rice__detail__ruby__hpp_

@@ -1,8 +1,8 @@
 AC_INIT(rice, 1.1)
 AC_CONFIG_SRCDIR(rice)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 
-AM_CONFIG_HEADER(rice/config.hpp)
+AC_CONFIG_HEADERS(rice/config.hpp)
 
 AC_LANG(C++)
 AC_PROG_CXX
@@ -20,6 +20,9 @@ if test x"${MINGW32}"x = xyesx; then
 else
   RICE_USING_MINGW32="false"
 fi
+
+m4_include(check_stdcxx_11.ac)
+AX_CXX_COMPILE_STDCXX_11(,optional)
 
 AC_SUBST(RICE_USING_MINGW32)
 
@@ -44,8 +47,8 @@ RICE_ROOT=`pwd`
 AC_SUBST(RICE_ROOT)
 
 AC_CONFIG_FILES(Makefile rice/Makefile test/Makefile sample/Makefile
-                ruby/Makefile ruby/lib/Makefile ruby/lib/mkmf-rice.rb
-                rice/detail/ruby_version_code.hpp)
+                ruby/Makefile ruby/lib/Makefile test/ext/Makefile
+                ruby/lib/mkmf-rice.rb rice/detail/ruby_version_code.hpp)
 AC_OUTPUT
 
 dnl Work around a bug in older versions of Rubygems

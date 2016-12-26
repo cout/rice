@@ -1,11 +1,14 @@
+$:.unshift File.expand_path(File.dirname(__FILE__))
+require 'ruby/lib/version'
+
 $spec = Gem::Specification.new do |s|
-  s.name = PROJECT_NAME
+  s.name = 'rice'
   s.version = Rice::VERSION
+  s.license = "MIT"
   s.summary = 'Ruby Interface for C++ Extensions'
-  s.homepage = 'http://rice.rubyforge.org/'
-  s.rubyforge_project = PROJECT_NAME
-  s.author = 'Paul Brannan'
-  s.email = 'curlypaul924@gmail.com'
+  s.homepage = 'https://github.com/jasonroelofs/rice'
+  s.authors = ['Paul Brannan', 'Jason Roelofs']
+  s.email = ['curlypaul924@gmail.com', 'jasonroelofs@gmail.com']
 
   s.description = <<-END
 Rice is a C++ interface to Ruby's C API.  It provides a type-safe and
@@ -14,6 +17,16 @@ Ruby extensions with C++ easier.  It is similar to Boost.Python in many
 ways, but also attempts to provide an object-oriented interface to all
 of the Ruby C API.
   END
+
+  s.extensions = ['extconf.rb']
+
+  s.test_files = [
+    'test/test_rice.rb',
+  ]
+
+  s.extra_rdoc_files = [ 'README' ]
+
+  s.require_paths = [ 'ruby/lib' ]
 
   patterns = [
     # Documentation
@@ -30,6 +43,7 @@ of the Ruby C API.
 
     # Autoconf
     'bootstrap',
+    'check_stdcxx_11.ac',
     'configure.ac',
     'configure',
     'config.guess',
@@ -83,16 +97,13 @@ of the Ruby C API.
 
     # Test source files
     'test/*.?pp',
+    'test/ext/Makefile.am',
+    'test/ext/Makefile.in',
+    'test/ext/t1/extconf.rb',
+    'test/ext/t1/*.*pp',
+    'test/ext/t2/extconf.rb',
+    'test/ext/t2/*.*pp'
   ]
+
   s.files = patterns.collect { |p| Dir.glob(p) }.flatten
-
-  s.extensions = ['extconf.rb']
-
-  s.test_files = [
-    'test/test_rice.rb',
-  ]
-
-  s.extra_rdoc_files = [ 'README' ]
-
-  s.require_paths = [ 'ruby/lib' ]
 end

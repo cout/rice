@@ -11,20 +11,22 @@ Object.cpp \
 String.cpp \
 Struct.cpp \
 Symbol.cpp \
-VM.cpp \
+Arg_operators.cpp \
+Address_Registration_Guard.cpp \
 detail/check_ruby_type.cpp \
 detail/demangle.cpp \
 detail/method_data.cpp \
-detail/protect.cpp \
-detail/mininode.cpp
+detail/protect.cpp
 
 nobase_include_HEADERS = \
 Address_Registration_Guard.hpp \
 Address_Registration_Guard.ipp \
 Address_Registration_Guard_defn.hpp \
-Allocation_Strategies.hpp \
 Array.hpp \
 Array.ipp \
+Arg.hpp \
+Arg_impl.hpp \
+Arg_operators.hpp \
 Builtin_Object.hpp \
 Builtin_Object.ipp \
 Builtin_Object_defn.hpp \
@@ -32,8 +34,6 @@ Class.hpp \
 Class.ipp \
 Class_defn.hpp \
 Constructor.hpp \
-Critical_Guard.hpp \
-Critical_Guard.ipp \
 Data_Object.hpp \
 Data_Object.ipp \
 Data_Object_defn.hpp \
@@ -69,8 +69,6 @@ Struct.hpp \
 Struct.ipp \
 Symbol.hpp \
 Symbol.ipp \
-VM.hpp \
-generate_code.rb \
 global_function.hpp \
 global_function.ipp \
 protect.hpp \
@@ -84,6 +82,7 @@ detail/Auto_Function_Wrapper.hpp \
 detail/Auto_Function_Wrapper.ipp \
 detail/Auto_Member_Function_Wrapper.hpp \
 detail/Auto_Member_Function_Wrapper.ipp \
+detail/Arguments.hpp \
 detail/Caster.hpp \
 detail/Exception_Handler.hpp \
 detail/Exception_Handler.ipp \
@@ -107,10 +106,9 @@ detail/node.hpp \
 detail/object_call.hpp \
 detail/object_call.ipp \
 detail/protect.hpp \
-detail/remove_const.hpp \
 detail/ruby.hpp \
-detail/rubysig.hpp \
 detail/st.hpp \
+detail/traits.hpp \
 detail/to_ruby.hpp \
 detail/to_ruby.ipp \
 detail/win32.hpp \
@@ -123,13 +121,4 @@ includedir = ${prefix}/include/rice
 AM_CPPFLAGS = @RUBY_CPPFLAGS@
 
 AM_CXXFLAGS = @RUBY_CXXFLAGS@
-
-detail/method_data.cpp: detail/method_data.cpp.rpp detail/mininode.hpp
-	ruby -C detail ../rubypp.rb method_data.cpp.rpp method_data.cpp
-
-detail/mininode.cpp: detail/mininode.cpp.rpp
-	ruby -C detail ../rubypp.rb mininode.cpp.rpp mininode.cpp
-
-detail/mininode.hpp: detail/mininode.hpp.rpp
-	ruby -C detail ../rubypp.rb mininode.hpp.rpp mininode.hpp
 

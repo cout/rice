@@ -8,7 +8,7 @@ namespace Rice {
   /**
    * A Director works exactly as a SWIG %director works (thus the name).
    * You use this class to help build proxy classes so that polymorphism
-   * works from C++ into Ruby.
+   * works from C++ into Ruby. See the main README for how this class works.
    */
   class Director 
   {
@@ -18,14 +18,6 @@ namespace Rice {
       Director(Object self);
 
       virtual ~Director() { }
-
-      //! Is the current method call path coming from Ruby?
-      /*! This method allows one to choose the call chain according
-       *  to the direction of the execution path. We need to do
-       *  this to prevent infinite loops where super() calls could
-       *  inadvertantly call methods back in Ruby
-       */
-      bool callIsFromRuby(const char* methodName) const;
 
       //! Raise a ruby exception when a call comes through for a pure virtual method
       /*! If a Ruby script calls 'super' on a method that's otherwise a pure virtual

@@ -24,21 +24,24 @@ class Auto_Function_Wrapper
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T, Arg15_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 15;
+  static const int Num_Args = 16;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14, VALUE ruby_arg15);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T, typename Arg11_T, typename Arg12_T, typename Arg13_T, typename Arg14_T, typename Arg15_T>
@@ -46,21 +49,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T, Arg15_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 15;
+  static const int Num_Args = 16;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14, VALUE ruby_arg15);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -69,21 +75,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 14;
+  static const int Num_Args = 15;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T, typename Arg11_T, typename Arg12_T, typename Arg13_T, typename Arg14_T>
@@ -91,21 +100,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T, Arg14_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 14;
+  static const int Num_Args = 15;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13, VALUE ruby_arg14);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -114,21 +126,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 13;
+  static const int Num_Args = 14;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T, typename Arg11_T, typename Arg12_T, typename Arg13_T>
@@ -136,21 +151,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T, Arg13_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 13;
+  static const int Num_Args = 14;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12, VALUE ruby_arg13);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -159,21 +177,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 12;
+  static const int Num_Args = 13;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T, typename Arg11_T, typename Arg12_T>
@@ -181,21 +202,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T, Arg12_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 12;
+  static const int Num_Args = 13;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11, VALUE ruby_arg12);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -204,21 +228,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 11;
+  static const int Num_Args = 12;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T, typename Arg11_T>
@@ -226,21 +253,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T, Arg11_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 11;
+  static const int Num_Args = 12;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10, VALUE ruby_arg11);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -249,21 +279,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 10;
+  static const int Num_Args = 11;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T, typename Arg10_T>
@@ -271,21 +304,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T, Arg10_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 10;
+  static const int Num_Args = 11;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9, VALUE ruby_arg10);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -294,21 +330,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 9;
+  static const int Num_Args = 10;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T, typename Arg9_T>
@@ -316,21 +355,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T, Arg9_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 9;
+  static const int Num_Args = 10;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8, VALUE ruby_arg9);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -339,21 +381,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 8;
+  static const int Num_Args = 9;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T, typename Arg8_T>
@@ -361,21 +406,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T, Arg8_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 8;
+  static const int Num_Args = 9;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7, VALUE ruby_arg8);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -384,21 +432,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 7;
+  static const int Num_Args = 8;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T, typename Arg7_T>
@@ -406,21 +457,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T, Arg7_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 7;
+  static const int Num_Args = 8;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6, VALUE ruby_arg7);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -429,21 +483,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 6;
+  static const int Num_Args = 7;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T, typename Arg6_T>
@@ -451,21 +508,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T, Arg6_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 6;
+  static const int Num_Args = 7;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5, VALUE ruby_arg6);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -474,21 +534,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 5;
+  static const int Num_Args = 6;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T, typename Arg5_T>
@@ -496,21 +559,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T, Arg5_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 5;
+  static const int Num_Args = 6;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4, VALUE ruby_arg5);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -519,21 +585,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 4;
+  static const int Num_Args = 5;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T, typename Arg4_T>
@@ -541,21 +610,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T, Arg4_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 4;
+  static const int Num_Args = 5;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3, VALUE ruby_arg4);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -564,21 +636,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T, Arg3_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 3;
+  static const int Num_Args = 4;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T, typename Arg3_T>
@@ -586,21 +661,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T, Arg3_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T, Arg3_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 3;
+  static const int Num_Args = 4;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2, VALUE ruby_arg3);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -609,21 +687,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T, Arg2_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T, Arg2_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 2;
+  static const int Num_Args = 3;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T, typename Arg2_T>
@@ -631,21 +712,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T, Arg2_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T, Arg2_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 2;
+  static const int Num_Args = 3;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1, VALUE ruby_arg2);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -654,21 +738,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T, Arg1_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T, Arg1_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 1;
+  static const int Num_Args = 2;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T, typename Arg1_T>
@@ -676,21 +763,24 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T, Arg1_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T, Arg1_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 1;
+  static const int Num_Args = 2;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0, VALUE ruby_arg1);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 // ---------------------------------------------------------------------
@@ -699,21 +789,24 @@ class Auto_Function_Wrapper<Func_T, Ret_T, Arg0_T>
   : public Wrapped_Function
 {
 public:
-  // typedef Ret_T (*Func)(Arg0_T);
   typedef Func_T Func;
 
-  static const int Num_Args = 0;
+  static const int Num_Args = 1;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
 
-  static VALUE call(VALUE ruby_arg0);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
   Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
 template<typename Func_T, typename Arg0_T>
@@ -721,24 +814,78 @@ class Auto_Function_Wrapper<Func_T, void, Arg0_T>
   : public Wrapped_Function
 {
 public:
-  // typedef void (*Func)(Arg0_T);
+  typedef Func_T Func;
+
+  static const int Num_Args = 1;
+
+  Auto_Function_Wrapper(
+      Func func,
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = 0);
+
+  ~Auto_Function_Wrapper();
+
+  static VALUE call(int argc, VALUE* args, VALUE self);
+
+private:
+  Func func_;
+  Data_Object<Exception_Handler> handler_;
+  Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
+};
+
+// ---------------------------------------------------------------------
+
+template<typename Func_T, typename Ret_T>
+class Auto_Function_Wrapper<Func_T, Ret_T>
+  : public Wrapped_Function
+{
+public:
+  // typedef void (*Func)();
   typedef Func_T Func;
 
   static const int Num_Args = 0;
 
   Auto_Function_Wrapper(
       Func func,
-      Data_Object<Exception_Handler> handler);
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = new Arguments());
 
-  static VALUE call(VALUE ruby_arg0);
+  ~Auto_Function_Wrapper();
+
+  static VALUE call();
 
 private:
   Func func_;
   Data_Object<Exception_Handler> handler_;
-  Address_Registration_Guard handler_guard_;
+  Arguments* arguments_;
 };
 
-// ---------------------------------------------------------------------
+template<typename Func_T>
+class Auto_Function_Wrapper<Func_T, void>
+  : public Wrapped_Function
+{
+public:
+  // typedef void (*Func)();
+  typedef Func_T Func;
+
+  static const int Num_Args = 0;
+
+  Auto_Function_Wrapper(
+      Func func,
+      Data_Object<Exception_Handler> handler,
+      Arguments* arguments = new Arguments());
+
+  ~Auto_Function_Wrapper();
+
+  static VALUE call();
+
+private:
+  Func func_;
+  Data_Object<Exception_Handler> handler_;
+  Arguments* arguments_;
+};
+
 #endif // DOXYGEN
 
 } // namespace detail

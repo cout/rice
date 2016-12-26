@@ -5,26 +5,26 @@
 
 inline Rice::Array::
 Array()
-  : Builtin_Object<RArray, T_ARRAY>(protect(rb_ary_new))
+  : Builtin_Object<T_ARRAY>(protect(rb_ary_new))
 {
 }
 
 inline Rice::Array::
 Array(Object v)
-  : Builtin_Object<RArray, T_ARRAY>(v)
+  : Builtin_Object<T_ARRAY>(v)
 {
 }
 
 inline Rice::Array::
 Array(VALUE v)
-  : Builtin_Object<RArray, T_ARRAY>(v)
+  : Builtin_Object<T_ARRAY>(v)
 {
 }
 
 template<typename Iter_T>
 inline Rice::Array::
 Array(Iter_T it, Iter_T end)
-  : Builtin_Object<RArray, T_ARRAY>(protect(rb_ary_new))
+  : Builtin_Object<T_ARRAY>(protect(rb_ary_new))
 {
   for(; it != end; ++it)
   {
@@ -35,7 +35,7 @@ Array(Iter_T it, Iter_T end)
 template<typename T, size_t n>
 inline Rice::Array::
 Array(T const (& a)[n])
-  : Builtin_Object<RArray, T_ARRAY>(protect(rb_ary_new))
+  : Builtin_Object<T_ARRAY>(protect(rb_ary_new))
 {
   for(size_t j = 0; j < n; ++j)
   {
@@ -52,8 +52,7 @@ size() const
 inline Rice::Object Rice::Array::
 operator[](ptrdiff_t index) const
 {
-  VALUE * ptr = RARRAY_PTR(this->value());
-  return ptr[position_of(index)];
+  return protect(rb_ary_entry, value(), position_of(index));
 }
 
 inline Rice::Array::Proxy Rice::Array::
@@ -88,12 +87,6 @@ shift()
   return protect(rb_ary_shift, value());
 }
 
-inline VALUE * Rice::Array::
-to_c_array()
-{
-  return RARRAY_PTR(this->value());
-}
-
 inline size_t Rice::Array::
 position_of(ptrdiff_t index) const
 {
@@ -117,13 +110,13 @@ Proxy(Array array, size_t index)
 inline Rice::Array::Proxy::
 operator Rice::Object() const
 {
-  return RARRAY_PTR(array_.value())[index_];
+  return protect(rb_ary_entry, array_.value(), index_);
 }
 
 inline VALUE Rice::Array::Proxy::
 value() const
 {
-  return RARRAY_PTR(array_.value())[index_];
+  return protect(rb_ary_entry, array_.value(), index_);
 }
 
 template<typename T>
@@ -131,7 +124,7 @@ Rice::Object Rice::Array::Proxy::
 operator=(T const & value)
 {
   Object o = to_ruby(value);
-  RARRAY_PTR(array_.value())[index_] = o.value();
+  rb_ary_store(array_.value(), index_, o.value());
   return o;
 }
 

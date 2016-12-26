@@ -1,5 +1,6 @@
 #include "unittest.hpp"
 #include "rice/Hash.hpp"
+#include "rice/global_function.hpp"
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -17,7 +18,7 @@ TESTCASE(default_construct)
 {
   Hash h;
   ASSERT_EQUAL(T_HASH, rb_type(h));
-  ASSERT_EQUAL(0, RHASH_TBL(h.value())->num_entries);
+  ASSERT_EQUAL(0, RHASH_SIZE(h.value()));
 }
 
 TESTCASE(construct_from_object)
@@ -25,7 +26,7 @@ TESTCASE(construct_from_object)
   Object o(rb_hash_new());
   Hash h(o);
   ASSERT_EQUAL(T_HASH, rb_type(h));
-  ASSERT_EQUAL(0, RHASH_TBL(h.value())->num_entries);
+  ASSERT_EQUAL(0, RHASH_SIZE(h.value()));
 }
 
 TESTCASE(construct_from_value)
@@ -33,7 +34,7 @@ TESTCASE(construct_from_value)
   VALUE v(rb_hash_new());
   Hash h(v);
   ASSERT_EQUAL(T_HASH, rb_type(h));
-  ASSERT_EQUAL(0, RHASH_TBL(h.value())->num_entries);
+  ASSERT_EQUAL(0, RHASH_SIZE(h.value()));
 }
 
 TESTCASE(copy_construct)
@@ -95,6 +96,7 @@ TESTCASE(construct_vector_from_hash_iterators)
   h[6] = 9;
   h[42] = 42;
   h[6] = 1;
+
   std::vector<Hash::Entry> v(h.begin(), h.end());
   std::sort(v.begin(), v.end());
   ASSERT_EQUAL(3u, v.size());
@@ -119,13 +121,16 @@ TESTCASE(iterate)
   h[6] = 9;
   h[42] = 42;
   h[6] = 1;
+
   std::vector<Hash::Entry> v;
   Hash::iterator it = h.begin();
   Hash::iterator end = h.end();
+
   for(; it != end; ++it)
   {
     v.push_back(*it);
   }
+
   std::sort(v.begin(), v.end());
   ASSERT_EQUAL(3u, v.size());
   ASSERT_EQUAL(v[0].key, to_ruby(1));
@@ -193,3 +198,15 @@ TESTCASE(iterate_and_change)
   ASSERT_EQUAL(to_ruby(m[42]), h[42]);
 }
 
+/**
+ * Issue 59 - Copy constructor compilation problem.
+ */
+
+namespace {
+  void testHashArg(Object self, Hash string) {
+  }
+}
+
+TESTCASE(use_hash_in_wrapped_function) {
+  define_global_function("test_hash_arg", &testHashArg);
+}

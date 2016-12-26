@@ -1,6 +1,7 @@
 #include "unittest.hpp"
 #include "rice/Array.hpp"
 #include "rice/String.hpp"
+#include "rice/global_function.hpp"
 
 using namespace Rice;
 
@@ -155,12 +156,6 @@ TESTCASE(shift)
   ASSERT_EQUAL(44, from_ruby<int>(a[1]));
 }
 
-TESTCASE(to_c_array)
-{
-  Array a;
-  ASSERT_EQUAL(RARRAY_PTR(a.value()), a.to_c_array());
-}
-
 TESTCASE(iterate)
 {
   Array a;
@@ -239,3 +234,15 @@ TESTCASE(assign_int)
   ASSERT_EQUAL(10, from_ruby<int>(a[0]));
 }
 
+/**
+ * Issue 59 - Copy constructor compilation problem.
+ */
+
+namespace {
+  void testArrayArg(Object self, Array string) {
+  }
+}
+
+TESTCASE(use_array_in_wrapped_function) {
+  define_global_function("test_array_arg", &testArrayArg);
+}

@@ -20,7 +20,7 @@ namespace Rice
  *  \endcode
  */
 class Array
-  : public Builtin_Object<RArray, T_ARRAY>
+  : public Builtin_Object<T_ARRAY>
 {
 public:
   //! Construct a new array
@@ -98,12 +98,6 @@ public:
   /*! \return the object which was shifted from the array.
    */
   Object shift();
-
-  //! Return a pointer to the beginning of the underlying C array.
-  //! Use with caution!
-  /*! \return a pointer to the beginning of the array.
-   */
-  VALUE * to_c_array();
 
 private:
   template<typename Array_Ref_T, typename Value_T>

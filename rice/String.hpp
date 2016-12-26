@@ -21,7 +21,7 @@ namespace Rice
  *  \endcode
  */
 class String
-  : public Builtin_Object<RString, T_STRING>
+  : public Builtin_Object<T_STRING>
 {
 public:
   //! Construct a new string.
@@ -84,6 +84,8 @@ Rice::Object to_ruby<Rice::String>(Rice::String const & x)
 {
   return x;
 }
+
+#include "Builtin_Object.ipp"
 
 #endif // Rice__String__hpp_
 

@@ -2,6 +2,9 @@
 #include "rice/Module.hpp"
 #include "rice/Exception.hpp"
 #include "rice/Array.hpp"
+#include "rice/Arg.hpp"
+#include "rice/global_function.hpp"
+#include "rice/Constructor.hpp"
 
 using namespace Rice;
 
@@ -21,19 +24,19 @@ TESTCASE(construct_from_value)
 namespace
 {
 
-class Silly_Exception
+class Quite_Silly_Exception
   : public std::exception
 {
 };
 
-void handle_silly_exception(Silly_Exception const & ex)
+void handle_silly_exception(Quite_Silly_Exception const & ex)
 {
   throw Exception(rb_eRuntimeError, "SILLY");
 }
 
 void throw_silly_exception(Object self)
 {
-  throw Silly_Exception();
+  throw Quite_Silly_Exception();
 }
 
 } // namespace
@@ -41,7 +44,7 @@ void throw_silly_exception(Object self)
 TESTCASE(add_handler)
 {
   Module m(anonymous_module());
-  m.add_handler<Silly_Exception>(handle_silly_exception);
+  m.add_handler<Quite_Silly_Exception>(handle_silly_exception);
   m.define_singleton_method("foo", throw_silly_exception);
   Object exc = m.instance_eval("begin; foo; rescue Exception; $!; end");
   ASSERT_EQUAL(rb_eRuntimeError, CLASS_OF(exc));
@@ -89,6 +92,22 @@ TESTCASE(define_module_function_simple)
   define_method_simple_ok = false;
   m.call("foo");
   ASSERT(define_method_simple_ok);
+}
+
+TESTCASE(define_module_does_not_leak_method_to_Object)
+{
+  Module m = define_module("TestModule");
+  m.define_module_function("test_module_function", &define_method_simple_helper);
+
+  Module runner(anonymous_module());
+  ASSERT_EXCEPTION_CHECK(
+    Exception,
+    runner.instance_eval("Object.test_module_function"),
+    ASSERT_EQUAL(
+      Object(rb_eNoMethodError),
+      Object(CLASS_OF(ex.value()))
+    )
+  );
 }
 
 namespace
@@ -177,12 +196,12 @@ Foo * from_ruby<Foo *>(Object x)
 TESTCASE(define_singleton_method_int_foo)
 {
   Module m(anonymous_module());
-  m.define_singleton_method("foo", define_method_int_foo_helper);
+  m.define_singleton_method("int_and_foo", define_method_int_foo_helper);
   define_method_int_result = 0;
   Foo * foo = new Foo;
   foo->x = 1024;
-  VALUE f = Data_Wrap_Struct(rb_cObject, 0, Default_Allocation_Strategy<Foo>::free, foo);
-  m.call("foo", 42, Object(f));
+  VALUE f = Data_Wrap_Struct(rb_cObject, 0, Default_Free_Function<Foo>::free, foo);
+  m.call("int_and_foo", 42, Object(f));
   ASSERT_EQUAL(42, define_method_int_foo_result_i);
   ASSERT_EQUAL(foo, define_method_int_foo_result_x);
 }
@@ -251,3 +270,228 @@ TESTCASE(mod_name_anonymous)
   ASSERT_EQUAL(String(""), m.name());
 }
 
+/**
+ * Tests for default arguments
+ */
+namespace
+{
+  int defaults_method_one_arg1;
+  int defaults_method_one_arg2;
+  bool defaults_method_one_arg3 = false;
+
+  void defaults_method_one(int arg1, int arg2 = 3, bool arg3 = true)
+  {
+    defaults_method_one_arg1 = arg1;
+    defaults_method_one_arg2 = arg2;
+    defaults_method_one_arg3 = arg3;
+  }
+}
+
+TESTCASE(define_method_default_arguments)
+{
+  Module m(anonymous_module());
+  m.define_method("foo", &defaults_method_one, (Arg("arg1"), Arg("arg2") = 3, Arg("arg3") = true));
+
+  Object o = m.instance_eval("o = Object.new; o.extend(self); o");
+  o.call("foo", 2);
+
+  ASSERT_EQUAL(2, defaults_method_one_arg1);
+  ASSERT_EQUAL(3, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  o.call("foo", 11, 10);
+
+  ASSERT_EQUAL(11, defaults_method_one_arg1);
+  ASSERT_EQUAL(10, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  o.call("foo", 22, 33, false);
+
+  ASSERT_EQUAL(22, defaults_method_one_arg1);
+  ASSERT_EQUAL(33, defaults_method_one_arg2);
+  ASSERT(!defaults_method_one_arg3);
+}
+
+TESTCASE(default_arguments_still_throws_argument_error)
+{
+  Module m(anonymous_module());
+  m.define_method("foo", &defaults_method_one, (Arg("arg1"), Arg("arg2") = 3, Arg("arg3") = true));
+
+  ASSERT_EXCEPTION_CHECK(
+      Exception,
+      m.instance_eval("o = Object.new; o.extend(self); o.foo()"),
+      ASSERT_EQUAL(
+          Object(rb_eArgError),
+          Object(CLASS_OF(ex.value()))
+          )
+      );
+
+  ASSERT_EXCEPTION_CHECK(
+      Exception,
+      m.instance_eval("o = Object.new; o.extend(self); o.foo(3, 4, false, 17)"),
+      ASSERT_EQUAL(
+          Object(rb_eArgError),
+          Object(CLASS_OF(ex.value()))
+          )
+      );
+}
+
+namespace {
+  int the_one_default_arg = 0;
+  void method_with_one_default_arg(int num = 4) {
+    the_one_default_arg = num;
+  }
+}
+
+TESTCASE(defining_methods_with_single_default_argument)
+{
+  // define_method
+  Module m(anonymous_module());
+  m.define_method("foo", &method_with_one_default_arg, (Arg("num") = 4));
+  m.instance_eval("o = Object.new; o.extend(self); o.foo()");
+  ASSERT_EQUAL(4, the_one_default_arg);
+
+  the_one_default_arg = 0;
+
+  // define_singleton_method
+  Class c(anonymous_class());
+  c.define_singleton_method("foo", &method_with_one_default_arg, (Arg("num") = 4));
+  c.call("foo");
+  ASSERT_EQUAL(4, the_one_default_arg);
+
+  the_one_default_arg = 0;
+
+  // define_module_function
+  m.define_module_function("foo2", &method_with_one_default_arg, (Arg("num") = 4));
+
+  m.call("foo2");
+  ASSERT_EQUAL(4, the_one_default_arg);
+}
+
+TESTCASE(default_arguments_for_define_singleton_method)
+{
+  Class c(anonymous_class());
+  c.define_singleton_method("foo", &defaults_method_one, (Arg("arg1"), Arg("arg2") = 3, Arg("arg3") = true));
+
+  c.call("foo", 2);
+
+  ASSERT_EQUAL(2, defaults_method_one_arg1);
+  ASSERT_EQUAL(3, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  c.call("foo", 11, 10);
+
+  ASSERT_EQUAL(11, defaults_method_one_arg1);
+  ASSERT_EQUAL(10, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  c.call("foo", 22, 33, false);
+
+  ASSERT_EQUAL(22, defaults_method_one_arg1);
+  ASSERT_EQUAL(33, defaults_method_one_arg2);
+  ASSERT(!defaults_method_one_arg3);
+}
+
+TESTCASE(default_arguments_for_define_module_function)
+{
+  Module m(anonymous_module());
+  m.define_module_function("foo", &defaults_method_one, (Arg("arg1"), Arg("arg2") = 3, Arg("arg3") = true));
+
+  m.call("foo", 2);
+
+  ASSERT_EQUAL(2, defaults_method_one_arg1);
+  ASSERT_EQUAL(3, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  m.call("foo", 11, 10);
+
+  ASSERT_EQUAL(11, defaults_method_one_arg1);
+  ASSERT_EQUAL(10, defaults_method_one_arg2);
+  ASSERT(defaults_method_one_arg3);
+
+  m.call("foo", 22, 33, false);
+
+  ASSERT_EQUAL(22, defaults_method_one_arg1);
+  ASSERT_EQUAL(33, defaults_method_one_arg2);
+  ASSERT(!defaults_method_one_arg3);
+}
+
+namespace {
+  std::string with_defaults_and_references_x;
+  bool with_defaults_and_references_doIt;
+
+  void with_defaults_and_references(std::string const& x, bool doIt = false)
+  {
+    with_defaults_and_references_x = x;
+    with_defaults_and_references_doIt = doIt;
+  }
+}
+
+TESTCASE(define_method_works_with_reference_arguments)
+{
+  Module m(anonymous_module());
+  m.define_module_function("foo", &with_defaults_and_references,
+      (Arg("x"), Arg("doIt") = false));
+
+  m.call("foo", "test");
+
+  ASSERT_EQUAL("test", with_defaults_and_references_x);
+  ASSERT(!with_defaults_and_references_doIt);
+}
+
+namespace {
+  class ReturnTest { };
+
+  class Factory {
+    public:
+      Factory() { returnTest_ = new ReturnTest(); }
+
+      const ReturnTest& getReturnTest() const {
+        return *returnTest_;
+      }
+
+     private:
+      const ReturnTest* returnTest_;
+  };
+}
+
+TESTCASE(define_method_works_with_const_reference_return)
+{
+  define_class<ReturnTest>("ReturnTest")
+    .define_constructor(Constructor<ReturnTest>());
+
+  define_class<Factory>("Factory")
+    .define_constructor(Constructor<Factory>())
+    .define_method("get_return_test", &Factory::getReturnTest);
+
+  Module m(anonymous_module());
+
+  Object result = m.instance_eval("Factory.new.get_return_test");
+
+  ASSERT_EQUAL("ReturnTest", result.class_of().name().c_str());
+}
+
+/*
+namespace {
+  float with_reference_defaults_x;
+  std::string with_reference_defaults_str;
+
+  void with_reference_defaults(float x, std::string const& str = std::string("testing"))
+  {
+    with_reference_defaults_x = x;
+    with_reference_defaults_str = str;
+  }
+}
+
+TESTCASE(define_method_works_with_reference_const_default_values)
+{
+  Module m(anonymous_module());
+  m.define_module_function("bar", &with_reference_defaults,
+      (Arg("x"), Arg("str") = std::string("testing")));
+
+  m.call("bar", 3);
+
+  ASSERT_EQUAL(3, with_reference_defaults_x);
+  ASSERT_EQUAL("testing", with_reference_defaults_str);
+}
+*/

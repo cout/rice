@@ -2,6 +2,8 @@
 #include "rice/Enum.hpp"
 #include "rice/Array.hpp"
 #include "rice/String.hpp"
+#include "rice/Constructor.hpp"
+#include "rice/global_function.hpp"
 #include <iostream>
 
 using namespace Rice;
@@ -160,3 +162,54 @@ TESTCASE(from_int)
   ASSERT_EQUAL(RED, *color);
 }
 
+namespace
+{
+  class Inner
+  {
+    public:
+      enum Props
+      {
+        VALUE1,
+        VALUE2,
+        VALUE3
+      };
+  };
+}
+
+TESTCASE(nested_enums)
+{
+  {
+    Data_Type<Inner> inner = define_class<Inner>("Inner");
+    define_enum<Inner::Props>("Props", inner)
+      .define_value("VALUE1", Inner::VALUE1)
+      .define_value("VALUE2", Inner::VALUE2)
+      .define_value("VALUE3", Inner::VALUE3);
+    inner.define_constructor(Constructor<Inner>());
+  }
+
+  ASSERT_EQUAL(to_ruby(int(0)), Object(protect(rb_eval_string, "Inner::Props::VALUE1.to_i")));
+  ASSERT_EQUAL(to_ruby(int(1)), Object(protect(rb_eval_string, "Inner::Props::VALUE2.to_i")));
+  ASSERT_EQUAL(to_ruby(int(2)), Object(protect(rb_eval_string, "Inner::Props::VALUE3.to_i")));
+}
+
+namespace
+{
+  Color getEnum()
+  {
+    return GREEN;
+  }
+}
+
+TESTCASE(return_enum_value_to_ruby)
+{
+  Enum<Color> rb_cColor = define_color_enum();
+  define_global_function("get_enum", &getEnum);
+
+  ASSERT_EQUAL(
+    Data_Object<Color>(protect(rb_eval_string, "Color::GREEN")),
+    Data_Object<Color>(protect(rb_eval_string, "get_enum"))
+  );
+
+  ASSERT_EQUAL(String("GREEN"), String(protect(rb_eval_string, "get_enum.to_s")));
+  ASSERT_EQUAL(String("#<Color::GREEN>"), String(protect(rb_eval_string, "get_enum.inspect")));
+}

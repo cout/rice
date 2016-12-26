@@ -5,6 +5,7 @@
 #include "detail/ruby.hpp"
 #include "Object_defn.hpp"
 #include "Address_Registration_Guard_defn.hpp"
+#include "Arg.hpp"
 
 namespace Rice
 {
@@ -97,12 +98,24 @@ public:
    *  \param name the name of the method
    *  \param func the implementation of the function, either a function
    *  pointer or a member function pointer.
+   *  \param arguments the list of arguments of this function, used for
+   *  defining default parameters (optional)
    *  \return *this
    */
   template<typename Func_T>
   Derived_T & define_method(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Arguments* arguments = 0);
+
+  // FIXME There's GOT to be a better way to
+  // do this. Handles the case where there is a single
+  // argument defined for this method
+  template<typename Func_T>
+  Derived_T & define_method(
+      Identifier name,
+      Func_T func,
+      Arg const& arg);
 
   //! Define a singleton method.
   /*! The method's implementation can be any function or member
@@ -113,12 +126,22 @@ public:
    *  \param name the name of the method
    *  \param func the implementation of the function, either a function
    *  pointer or a member function pointer.
+   *  \param arguments the list of arguments of this function, used for
+   *  defining default parameters (optional)
    *  \return *this
    */
   template<typename Func_T>
   Derived_T & define_singleton_method(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Arguments* arguments = 0);
+
+  // FIXME: See define_method with Arg above
+  template<typename Func_T>
+  Derived_T & define_singleton_method(
+      Identifier name,
+      Func_T func,
+      Arg const& arg);
 
   //! Define a module function.
   /*! A module function is a function that can be accessed either as a
@@ -131,12 +154,22 @@ public:
    *  \param name the name of the method
    *  \param func the implementation of the function, either a function
    *  pointer or a member function pointer.
+   *  \param arguments the list of arguments of this function, used for
+   *  defining default parameters (optional)
    *  \return *this
    */
   template<typename Func_T>
   Derived_T & define_module_function(
       Identifier name,
-      Func_T func);
+      Func_T func,
+      Arguments* arguments = 0);
+
+  // FIXME: See define_method with Arg above
+  template<typename Func_T>
+  Derived_T & define_module_function(
+      Identifier name,
+      Func_T func,
+      Arg const& arg);
 
   //! Define an iterator.
   /*! Essentially this is a conversion from a C++-style begin/end

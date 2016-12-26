@@ -2,10 +2,10 @@
 #define Rice__Hash__hpp_
 
 #include "Builtin_Object_defn.hpp"
+#include "Array.hpp"
 #include "to_from_ruby_defn.hpp"
 #include "detail/ruby.hpp"
-#include "detail/st.hpp"
-#include "detail/remove_const.hpp"
+#include "detail/traits.hpp"
 #include <iterator>
 
 namespace Rice
@@ -22,7 +22,7 @@ namespace Rice
 //!   std::cout << String(h[42]) << std::endl;
 //! \endcode
 class Hash
-  : public Builtin_Object<RHash, T_HASH>
+  : public Builtin_Object<T_HASH>
 {
 public:
   //! Construct a new hash.
@@ -152,7 +152,10 @@ class Hash::Iterator
 {
 public:
   //! Construct a new Iterator.
-  Iterator(Hash_Ref_T hash, st_data_t bin, st_table_entry * ptr);
+  Iterator(Hash_Ref_T hash);
+
+  //! Construct a new Iterator with a given start-at index point
+  Iterator(Hash_Ref_T hash, int start_at);
 
   //! Copy construct an Iterator.
   Iterator(Iterator const & iterator);
@@ -189,20 +192,34 @@ public:
   //! Swap with another iterator of the same type.
   void swap(Iterator & iterator);
 
+protected:
+  Object current_key();
+
+  Array hash_keys();
+
 private:
   Hash hash_;
-  st_table * tbl_;
-#if RICE__RUBY_VERSION_CODE >= 190
-  st_index_t bin_;
-#else
-  int bin_;
-#endif
-  st_table_entry * ptr_;
+  size_t current_index_;
+  VALUE keys_;
 
   mutable typename detail::remove_const<Value_T>::Type tmp_;
 };
 
 } // namespace Rice
+
+template<>
+inline
+Rice::Hash from_ruby<Rice::Hash>(Rice::Object x)
+{
+  return Rice::Hash(x);
+}
+
+template<>
+inline
+Rice::Object to_ruby<Rice::Hash>(Rice::Hash const & x)
+{
+  return x;
+}
 
 #include "Hash.ipp"
 

@@ -4,7 +4,6 @@
 #include "Data_Object.hpp"
 #include "Data_Type.hpp"
 #include "Symbol.hpp"
-#include "Exception.hpp"
 #include "protect.hpp"
 
 #include "Module.hpp"
@@ -120,10 +119,42 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_method(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Arguments* arguments)
 {
   detail::define_method_and_auto_wrap(
-      *this, name, func, this->handler());
+      *this, name, func, this->handler(), arguments);
+  return (Derived_T &)*this;
+}
+
+template<typename Base_T, typename Derived_T>
+template<typename Func_T>
+inline
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+define_method(
+    Identifier name,
+    Func_T func,
+    Arg const& arg)
+{
+  Arguments* args = new Arguments();
+  args->add(arg);
+  return define_method(name, func, args);
+}
+
+
+template<typename Base_T, typename Derived_T>
+template<typename Func_T>
+inline
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+define_singleton_method(
+    Identifier name,
+    Func_T func,
+    Arguments* arguments)
+{
+  detail::define_method_and_auto_wrap(
+      rb_singleton_class(*this), name, func, this->handler(), arguments);
   return (Derived_T &)*this;
 }
 
@@ -134,10 +165,31 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_singleton_method(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Arg const& arg)
 {
-  detail::define_method_and_auto_wrap(
-      rb_class_of(*this), name, func, this->handler());
+  Arguments* args = new Arguments();
+  args->add(arg);
+  return define_singleton_method(name, func, args);
+}
+
+template<typename Base_T, typename Derived_T>
+template<typename Func_T>
+inline
+Derived_T &
+Rice::Module_impl<Base_T, Derived_T>::
+define_module_function(
+    Identifier name,
+    Func_T func,
+    Arguments* arguments)
+{
+  if(this->rb_type() != T_MODULE)
+  {
+    throw std::runtime_error("can only define module functions for modules");
+  }
+
+  define_method(name, func, arguments);
+  define_singleton_method(name, func, arguments);
   return (Derived_T &)*this;
 }
 
@@ -148,18 +200,12 @@ Derived_T &
 Rice::Module_impl<Base_T, Derived_T>::
 define_module_function(
     Identifier name,
-    Func_T func)
+    Func_T func,
+    Arg const& arg)
 {
-  if(this->rb_type() != T_MODULE)
-  {
-    throw Rice::Exception(
-        rb_eTypeError,
-        "can only define module functions for modules");
-  }
-
-  define_method(name, func);
-  define_singleton_method(name, func);
-  return (Derived_T &)*this;
+  Arguments* args = new Arguments();
+  args->add(arg);
+  return define_module_function(name, func, args);
 }
 
 template<typename Base_T, typename Derived_T>
@@ -239,7 +285,7 @@ bool
 Rice::Module_impl<Base_T, Derived_T>::
 const_defined(Identifier name) const
 {
-  int result = protect(rb_const_defined, *this, name);
+  size_t result = protect(rb_const_defined, *this, name);
   return bool(result);
 }
 
@@ -249,7 +295,7 @@ void
 Rice::Module_impl<Base_T, Derived_T>::
 remove_const(Identifier name)
 {
-  protect(rb_mod_remove_const, *this, Symbol(name));
+  protect(rb_mod_remove_const, *this, name.to_sym());
 }
 
 template<typename Base_T, typename Derived_T>

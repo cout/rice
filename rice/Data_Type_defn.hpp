@@ -39,10 +39,12 @@ public:
   // Must be public to workaround gcc 3.3
   typedef std::map<VALUE, detail::Abstract_Caster *> Casters;
 
-protected:
   virtual detail::Abstract_Caster * caster() const = 0;
 
-  static Casters casters_;
+  static Casters & casters();
+
+private:
+  static Casters * casters_;
 };
 
 //! Define a new data class in the namespace given by module.
@@ -90,6 +92,15 @@ template<typename T, typename Base_T>
 Rice::Data_Type<T> define_class(
     char const * name);
 
+//! Define an implicit conversion rule between two types.
+/*! Given two types, which can be custom types already 
+ *  wrapped into Rice or fundamental C++ types, this
+ *  tells Rice that the two types can be used interchangably.
+ *  \param From_T The type to convert from
+ *  \param To_T The type to convert to
+ */
+template<typename From_T, typename To_T>
+void define_implicit_cast();
 
 //! A mechanism for binding ruby types to C++ types.
 /*! This class binds run-time types (Ruby VALUEs) to compile-time types
@@ -148,7 +159,37 @@ public:
    */
   template<typename Constructor_T>
   Data_Type<T> & define_constructor(
-      Constructor_T constructor);
+      Constructor_T constructor,
+      Arguments * arguments = 0);
+
+  template<typename Constructor_T>
+  Data_Type<T> & define_constructor(
+      Constructor_T constructor,
+      Arg const& arg);
+
+  //! Register a Director class for this class.
+  /*! For any class that uses Rice::Director to enable polymorphism
+   *  across the languages, you need to register that director proxy
+   *  class with this method. Not doing so will cause the resulting 
+   *  library to die at run time when it tries to convert the base
+   *  type into the Director proxy type, and cannot find an appropriate Caster.
+   *
+   *  This method takes no arguments, just needs the type of the
+   *  Director proxy class.
+   *
+   *  For example:
+   *  \code
+   *    class FooDirector : public Foo, public Rice::Director {
+   *      ...
+   *    };
+   *
+   *    define_class<Foo>("Foo")
+   *      .define_director<FooDirector>()
+   *      .define_constructor(Constructor<FooDirector, Rice::Object>());
+   *  \endcode
+   */
+  template<typename Director_T>
+  Data_Type<T>& define_director();
 
   //! Convert ruby object x to type T.
   /*! \param x the object to convert.
@@ -160,6 +201,10 @@ public:
   /*! \return true if the object is bound, false otherwise.
    */
   static bool is_bound();
+
+  virtual detail::Abstract_Caster * caster() const;
+
+  static std_unique_ptr<detail::Abstract_Caster> caster_;
 
 protected:
   //! Bind a Data_Type to a VALUE.
@@ -194,12 +239,9 @@ private:
   template<typename T_>
   friend class Data_Type;
 
-  virtual detail::Abstract_Caster * caster() const;
-
   static void check_is_bound();
 
   static VALUE klass_;
-  static std::auto_ptr<detail::Abstract_Caster> caster_;
 
   typedef std::set<Data_Type<T> *> Instances;
 

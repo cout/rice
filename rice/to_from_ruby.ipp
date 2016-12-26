@@ -39,7 +39,7 @@ template<>
 inline
 int from_ruby<int>(Rice::Object x)
 {
-  return Rice::protect(Rice::detail::num2int, x);
+  return Rice::detail::num2int(x);
 }
 
 template<>
@@ -101,7 +101,7 @@ template<>
 inline
 unsigned int from_ruby<unsigned int>(Rice::Object x)
 {
-  return Rice::protect(Rice::detail::num2uint, x);
+  return Rice::detail::num2uint(x);
 }
 
 template<>
@@ -164,7 +164,7 @@ char from_ruby<char>(Rice::Object x)
 {
   if(x.rb_type() == T_STRING)
   {
-    if(RSTRING_LEN(x.value()) == 0)
+    if(RSTRING_LEN(x.value()) == 1)
     {
       return RSTRING_PTR(x.value())[0];
     }
@@ -257,22 +257,11 @@ Rice::Object to_ruby<double>(double const & x)
 }
 
 // ---------------------------------------------------------------------
-namespace Rice
-{
-  namespace detail
-  {
-    inline VALUE str2ccstr(VALUE x)
-    {
-      return (VALUE)(StringValuePtr(x));
-    }
-  }
-}
-
 template<>
 inline
 char const * from_ruby<char const *>(Rice::Object x)
 {
-  return (char const *)Rice::protect(Rice::detail::str2ccstr, x);
+  return Rice::String(x).str().data();
 }
 
 template<>
@@ -287,13 +276,19 @@ template<>
 inline
 std::string from_ruby<std::string>(Rice::Object x)
 {
-  return std::string(from_ruby<char const *>(x));
+  return Rice::String(x).str();
 }
 
 template<>
 inline
 Rice::Object to_ruby<std::string>(std::string const & x)
 {
-  return to_ruby(x.c_str());
+  return Rice::protect(rb_str_new, x.data(), x.size());
 }
 
+template<>
+inline
+std::string* from_ruby<std::string* >(Rice::Object x)
+{
+  return new std::string(Rice::String(x).str());
+}

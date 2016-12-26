@@ -1,14 +1,23 @@
-# Make sure that archflags does not include ppc if we're 
-# on Intel x86 processor on Mac
+# Make sure that archflags does not include ppc if we're
+# on Intel x86 processor on Mac, and that we use the proper arch
 if `uname`.chomp == "Darwin"
-  arch = `uname -p`.chomp
+  RUBY_PLATFORM =~ /darwin(\d+)/
+  darwin_version = $1.to_i
+
+  arch =
+    if darwin_version >= 10
+      'x86_64'
+    else
+      `uname -p`.chomp
+    end
+
   ENV["ARCHFLAGS"] = "-arch #{arch}"
 end
 
 require 'mkmf'
 require 'rbconfig'
 
-# 
+#
 # A script to override some defaults in mkmf.rb for C++ code
 # compilation.
 #
@@ -24,21 +33,23 @@ def init_mkmf_rice(config = CONFIG)
   $LIBRUBYARG_STATIC = "@RUBY_LIBRUBYARG_STATIC@"
   $RICE_CPPFLAGS = "@RICE_CPPFLAGS@"
   $RICE_LDFLAGS = "@RICE_LDFLAGS@"
-  $RICE_PREFIX = "@prefix@"
+  $RICE_PREFIX = File.join(File.dirname(File.expand_path(__FILE__)))
 
   $RICE_USING_MINGW32 = @RICE_USING_MINGW32@
-
-  # Ruby < 1.8.6 does not have $DEFLIBPATH
-  $DEFLIBPATH ||= []
 
   # We use this for the samples
   $DEFLIBPATH.unshift(with_config('libpath')) if with_config('libpath')
 
-  # Ruby 1.8.6 uses $preload without setting it
-  $preload ||= nil
+  lib_dirs = []
+
+  lib_dir = "#{$RICE_PREFIX}/lib"
+  lib64_dir = "#{$RICE_PREFIX}/lib64"
+
+  lib_dirs << "-L#{lib_dir}" if File.directory?(lib_dir)
+  lib_dirs << "-L#{lib64_dir}" if File.directory?(lib64_dir)
 
   $CPPFLAGS << " #{$RICE_CPPFLAGS} -I#{$RICE_PREFIX}/include"
-  $LDFLAGS << " #{$RICE_LDFLAGS} -L#{$RICE_PREFIX}/lib"
+  $LDFLAGS << " #{$RICE_LDFLAGS} #{lib_dirs.join(" ")} -lrice"
 
   # Turn on debugging and verbose warnings by default on compilers that
   # support it
@@ -67,9 +78,6 @@ def init_mkmf_rice(config = CONFIG)
     $LDSHARED_CXX = \
       replace_cc_with_cxx(config['LDSHARED'])
   end
-
-  # Link against the rice library by default
-  have_library('rice') or raise 
 end
 
 def replace_cc_with_cxx(str)
@@ -129,7 +137,7 @@ class Object
   alias_method :link_command_orig, :link_command
   def link_command(ldflags, opt='', libpath=$DEFLIBPATH|$LIBPATH)
     link_command = link_command_orig(ldflags, opt, libpath)
-    return Config::expand(
+    return RbConfig::expand(
         link_command,
         'CXXFLAGS' => "#{$CXXFLAGS}")
   end
@@ -183,7 +191,7 @@ class RiceMakefileCreator
     end
 
     def puts(*strings)
-      print(*strings.map { |s| "#{s}\n" })
+      print(*strings.flatten.map { |s| "#{s}\n" })
     end
 
     def close

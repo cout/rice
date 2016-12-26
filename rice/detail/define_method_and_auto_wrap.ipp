@@ -12,17 +12,18 @@ define_method_and_auto_wrap(
     VALUE klass,
     Identifier name,
     Fun_T function,
-    Data_Object<Exception_Handler> handler)
+    Data_Object<Exception_Handler> handler,
+    Arguments* arguments)
 {
   Data_Object<Wrapped_Function> f(
-      wrap_function(function, handler),
+      wrap_function(function, handler, arguments),
       rb_cObject);
   Rice::protect(
       define_method_with_data,
       klass,
       name.id(),
       f->func(),
-      f->arity(),
+      -1,
       f);
 }
 

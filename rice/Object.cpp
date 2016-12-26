@@ -93,7 +93,14 @@ Rice::Object Rice::Object::
 iv_get(
     Identifier name) const
 {
-  return protect(rb_iv_get, *this, name.c_str());
+  return protect(rb_ivar_get, *this, name.id());
+}
+
+Rice::Object Rice::Object::
+attr_get(
+    Identifier name) const
+{
+  return protect(rb_attr_get, *this, name.id());
 }
 
 Rice::Object Rice::Object::
@@ -101,7 +108,16 @@ vcall(
     Identifier id,
     Array args)
 {
-  return protect(rb_funcall3, *this, id, args.size(), args.to_c_array());
+  std::vector<VALUE> a(args.size());
+
+  Array::const_iterator it  = args.begin();
+  Array::const_iterator end = args.end();
+
+  for(int i = 0 ;it != end; i++, ++it) {
+    a[i] = it->value();
+  }
+
+  return protect(rb_funcall3, *this, id, (int)args.size(), &a[0]);
 }
 
 void Rice::Object::
